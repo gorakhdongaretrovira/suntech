@@ -1,8 +1,8 @@
 ﻿import { useState, useEffect } from "react";
+import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const defaultForm = { name: "", email: "", phone: "", message: "" };
-const WA_NUMBER = "919876543210";
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&display=swap');
@@ -195,7 +195,7 @@ const css = `
   }
   .ct-info-value:hover { color: #e8a020; }
 
-  /* WhatsApp CTA */
+  /* Contact CTA */
   .ct-wa-btn {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     width: 100%; padding: 14px 20px; margin-top: 20px;
@@ -416,7 +416,7 @@ const css = `
 export default function Contact() {
   const location = useLocation();
   const [form, setForm]       = useState(defaultForm);
-  const [toast, setToast]     = useState(false);
+  const [toast, setToast]     = useState("");
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -430,27 +430,35 @@ export default function Contact() {
   const handleChange = field => e =>
     setForm(c => ({ ...c, [field]: e.target.value }));
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setSending(true);
+    setToast("");
 
-    const lines = [
-      `Hello SunTech Team,`,
-      `My name is ${form.name}.`,
-      form.message || "I would like to discuss my industrial requirements.",
-      form.phone ? `Phone: ${form.phone}` : "",
-      form.email ? `Email: ${form.email}` : "",
-    ].filter(Boolean);
+    try {
+      await axios.post("http://localhost:5000/api/contact", {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
+      });
 
-    setTimeout(() => {
+      setForm(defaultForm);
+      setToast("Message sent successfully! Download will begin shortly.");
+
+      const link = document.createElement("a");
+      link.href = "/suntech_brochure.pdf";
+      link.download = "SunTech-Brochure.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(error);
+      setToast("Failed to send message. Please try again later.");
+    } finally {
       setSending(false);
-      setToast(true);
-      setTimeout(() => setToast(false), 3500);
-      window.open(
-        `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`,
-        "_blank"
-      );
-    }, 600);
+      window.setTimeout(() => setToast(""), 3500);
+    }
   };
 
   const msgLen = form.message.length;
@@ -516,17 +524,15 @@ export default function Contact() {
                 </div>
 
                 <a
-                  href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hello SunTech Team, I would like to discuss my requirements.")}`}
-                  target="_blank" rel="noreferrer"
+                  href="tel:+919876543210"
                   className="ct-wa-btn"
                 >
                   <span className="ct-wa-icon">
-                    <svg viewBox="0 0 24 24" fill="#fff" width="12" height="12">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.849L.057 23.535a.75.75 0 00.916.917l5.688-1.465A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75A9.75 9.75 0 1112 2.25 9.75 9.75 0 0112 21.75z"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+                      <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.23 11.72 11.72 0 003.7.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 6a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.7 1 1 0 01-.23 1.11l-2.24 2.24z"/>
                     </svg>
                   </span>
-                  Chat on WhatsApp
+                  Call Sales
                   <svg viewBox="0 0 16 16" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" style={{ marginLeft: "auto" }}>
                     <path d="M3 8h10M9 4l4 4-4 4"/>
                   </svg>
@@ -593,11 +599,11 @@ export default function Contact() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="#e8a020" strokeWidth="2" strokeLinecap="round" width="18" height="18" style={{ animation: "spin 1s linear infinite" }}>
                           <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                         </svg>
-                        Opening WhatsApp…
+                        Sending message...
                       </>
                     ) : (
                       <>
-                        Send via WhatsApp
+                        Send Message
                         <span className="ct-submit-arrow">
                           <svg viewBox="0 0 16 16" fill="none" stroke="#e8a020" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                             <path d="M3 8h10M9 4l4 4-4 4"/>
@@ -611,7 +617,7 @@ export default function Contact() {
                     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                       <path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.12L8 10.5l-3.71 1.95.71-4.12L2 5.5l4.15-.75z"/>
                     </svg>
-                    Your information is private and will only be shared via WhatsApp
+                    Your information is private and will only be used to contact you
                   </div>
 
                 </form>
@@ -636,7 +642,7 @@ export default function Contact() {
       {toast && (
         <div className="ct-toast">
           <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e8a020", flexShrink: 0 }} />
-          WhatsApp is opening — message ready to send!
+          {toast}
         </div>
       )}
 
