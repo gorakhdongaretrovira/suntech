@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 
-  // For Hostinger / normal domain hosting
-  base: '/',
+  // GitHub Pages deployment
+  base: '/suntech/',
 
   optimizeDeps: {
     include: ['leaflet', 'react-leaflet'],
