@@ -442,11 +442,11 @@ export default function Navbar() {
       <header className={`nb${scrolled ? " scrolled" : ""}`}>
         <div className="nb-inner">
 
-          {/* LOGO — tight glassmorphic box */}
+          {/* LOGO — only change: /suntech/logo.jpeg */}
           <Link to="/" className="nb-logo" onClick={closeAll}>
             <div className="nb-logo-box">
               <img
-                src="/logo.jpeg"
+                src="/suntech/logo.jpeg"
                 alt="SunTech Packaging Machines"
                 loading="eager"
                 draggable="false"

@@ -36,7 +36,7 @@ const deriveCategory = (product) => {
 const RAW_PRODUCTS = [
   {
     name: "Banana Slicer Machine",
-    image: "/products/Banana Slicer Making Machine.png",
+    image: "/suntech/products/Banana Slicer Making Machine.png",
     shortDesc: "Uniform-cut banana slicing for high-volume chips & snack production lines.",
     specs: {
       "Machine Type":     "Banana Slicing Machine",
@@ -55,7 +55,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Camphor Making Machine",
-    image: "/products/Camphor Making Machine.png",
+    image: "/suntech/products/Camphor Making Machine.png",
     shortDesc: "Automatic tablet-press compacting camphor powder into uniform tablet form.",
     specs: {
       "Machine Type":        "Tablet / Camphor Press Machine",
@@ -74,7 +74,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Coder Printer",
-    image: "/products/Coder Printer.png",
+    image: "/suntech/products/Coder Printer.png",
     shortDesc: "Continuous inkjet coder for high-resolution batch, date & lot printing on pouches.",
     specs: {
       "Machine Type":       "Continuous Inkjet (CIJ) Coder",
@@ -93,7 +93,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Coding Machine",
-    image: "/products/Coding Machine.png",
+    image: "/suntech/products/Coding Machine.png",
     shortDesc: "Inline thermal-transfer batch/date coder for flexible packaging and carton lines.",
     specs: {
       "Machine Type":     "Thermal Transfer Overprinter (TTO)",
@@ -112,7 +112,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Collar Type VFFS Machine",
-    image: "/products/Collar Type VFFS Machine.png",
+    image: "/suntech/products/Collar Type VFFS Machine.png",
     shortDesc: "Vertical Form-Fill-Seal with collar former for free-flow powders, granules & seeds.",
     specs: {
       "Machine Type":     "Collar Type Vertical Form Fill Seal (VFFS)",
@@ -131,7 +131,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Food Processing Machine",
-    image: "/products/Food Processing Machines.png",
+    image: "/suntech/products/Food Processing Machines.png",
     shortDesc: "Multi-function food processing unit for cutting, mixing and pre-processing applications.",
     specs: {
       "Machine Type":     "Multi-function Food Processor",
@@ -150,7 +150,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Heat Air Gun",
-    image: "/products/Heat Air Gun.png",
+    image: "/suntech/products/Heat Air Gun.png",
     shortDesc: "Industrial hot-air gun for shrink-wrap finishing, heat-sealing rework and PVC sleeve application.",
     specs: {
       "Machine Type":      "Industrial Heat Gun",
@@ -168,7 +168,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Labelling Machine",
-    image: "/products/Labelling Machine.png",
+    image: "/suntech/products/Labelling Machine.png",
     shortDesc: "High-speed self-adhesive labeller for accurate front/back and wraparound label placement.",
     specs: {
       "Machine Type":       "Self-Adhesive Pressure Sensitive Labelling Machine",
@@ -187,7 +187,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Liquid Filling Machine",
-    image: "/products/Liquid Filling Machine.png",
+    image: "/suntech/products/Liquid Filling Machine.png",
     shortDesc: "High-precision volumetric piston filling for liquids, edible oils, syrups and chemicals.",
     specs: {
       "Machine Type":         "Volumetric Piston Liquid Filling Machine",
@@ -206,7 +206,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Nitrogen Flushing Machine",
-    image: "/products/Nitrogen Flushing Machine.png",
+    image: "/suntech/products/Nitrogen Flushing Machine.png",
     shortDesc: "MAP sealing unit with nitrogen/gas flushing to extend shelf life and maintain freshness.",
     specs: {
       "Machine Type":   "Nitrogen Flushing & Sealing Machine",
@@ -225,7 +225,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Packaging Machine",
-    image: "/products/Packaging Machine.png",
+    image: "/suntech/products/Packaging Machine.png",
     shortDesc: "Multi-purpose automatic packaging machine for powders, granules and free-flow materials.",
     specs: {
       "Machine Type":     "Automatic Packaging Machine (Auger Filler + VFFS)",
@@ -244,7 +244,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Packing Machine",
-    image: "/products/Packing Machine.png",
+    image: "/suntech/products/Packing Machine.png",
     shortDesc: "Compact semi-auto packing solution suited for small to mid-scale production facilities.",
     specs: {
       "Machine Type":     "Semi-Automatic Granule / Powder Packing Machine",
@@ -263,7 +263,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Pouch Packaging Machine",
-    image: "/products/Pouch Packaging Machine.png",
+    image: "/suntech/products/Pouch Packaging Machine.png",
     shortDesc: "Pre-made pouch fill-seal machine for snacks, namkeen, seeds and small granules.",
     specs: {
       "Machine Type":     "Pre-made Pouch Fill & Seal Machine",
@@ -282,7 +282,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Powder Packaging Machine",
-    image: "/products/Powder Packaging Machine.png",
+    image: "/suntech/products/Powder Packaging Machine.png",
     shortDesc: "Dedicated auger-fill system for fine, free-flowing and non-free-flowing powders.",
     specs: {
       "Machine Type":     "Auger Filler Powder Packaging Machine",
@@ -301,7 +301,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Rice Destoner Cleaning Machine",
-    image: "/products/Rice Destoner Cleaning Machine.png",
+    image: "/suntech/products/Rice Destoner Cleaning Machine.png",
     shortDesc: "Gravity separator that effectively removes stones, pebbles and heavy impurities from grain.",
     specs: {
       "Machine Type":       "Gravity Rice Destoner / Grain Cleaner",
@@ -320,7 +320,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Scrubber Packaging Machine",
-    image: "/products/Scrubber Packaging Machine.png",
+    image: "/suntech/products/Scrubber Packaging Machine.png",
     shortDesc: "Custom-configured packaging machine for scrubber pads and household cleaning products.",
     specs: {
       "Machine Type":     "Horizontal / Flow-Wrap Scrubber Packing Machine",
@@ -339,7 +339,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Sealing Machine",
-    image: "/products/Sealing Machine.png",
+    image: "/suntech/products/Sealing Machine.png",
     shortDesc: "Continuous band sealer for fast, consistent and airtight closure of all pouch types.",
     specs: {
       "Machine Type":      "Continuous Band Sealing Machine",
@@ -358,7 +358,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Seeds Packaging Machine",
-    image: "/products/Seeds Packaging Machine.png",
+    image: "/suntech/products/Seeds Packaging Machine.png",
     shortDesc: "Precision weigher-filler engineered for vegetable seeds, spice seeds and agricultural inputs.",
     specs: {
       "Machine Type":     "Automatic Seeds Weighing & Packaging Machine",
@@ -377,7 +377,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Shrink Tunnel Packaging Machine",
-    image: "/products/Shrink Tunnel Packaging Machine.png",
+    image: "/suntech/products/Shrink Tunnel Packaging Machine.png",
     shortDesc: "Conveyor-fed heat-shrink tunnel providing tamper-evident, tightly-wrapped bundle packaging.",
     specs: {
       "Machine Type":      "Hot Air Shrink Tunnel",
@@ -396,7 +396,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Strapping Machine",
-    image: "/products/Strapping Machine.png",
+    image: "/suntech/products/Strapping Machine.png",
     shortDesc: "Automatic PET/PP strapping machine for secure carton and bundle unitising at high throughput.",
     specs: {
       "Machine Type":    "Automatic Table-top / Arch Strapping Machine",
@@ -415,7 +415,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Vacuum Packaging Machine",
-    image: "/products/Vacuum Packaging Machine.png",
+    image: "/suntech/products/Vacuum Packaging Machine.png",
     shortDesc: "Chamber-type vacuum sealer for extended shelf life across food and pharmaceutical products.",
     specs: {
       "Machine Type":     "Double-Chamber Vacuum Packaging Machine",
@@ -434,7 +434,7 @@ const RAW_PRODUCTS = [
   },
   {
     name: "Wrapping Machine",
-    image: "/products/Wrapping Machine.png",
+    image: "/suntech/products/Wrapping Machine.png",
     shortDesc: "Horizontal flow-wrap machine for biscuits, soaps, bars and flat rectangular products.",
     specs: {
       "Machine Type":     "Horizontal Flow Wrapping Machine (HFFS)",
@@ -460,8 +460,5 @@ export const products = RAW_PRODUCTS.map((product) => ({
   application: parseApplications(product.specs?.Application),
 }));
 
-// Named export for compatibility
 export const PRODUCTS = products;
-
-// Default export
 export default products;
