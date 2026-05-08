@@ -154,7 +154,7 @@ export default function Brochure() {
           <p className="bro-sub">
             A complete overview of our packaging machines, technical specs, and installation capabilities.
           </p>
-          <a href="/brochure.pdf" target="_blank" rel="noopener noreferrer" className="bro-download-btn">
+          <a href="/suntech_brochure.pdf" target="_blank" rel="noopener noreferrer" className="bro-download-btn">
             <svg className="bro-download-icon" viewBox="0 0 20 20" fill="none" width="18" height="18">
               <path d="M10 3v10M10 13l-3-3M10 13l3-3M3 16h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
