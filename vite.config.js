@@ -1,22 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-
-  // Custom domain
-  base: '/',
-
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-  },
-
-  build: {
-    outDir: 'dist',
-  },
-
-  optimizeDeps: {
-    include: ['leaflet', 'react-leaflet'],
-  },
+plugins: [react()],
+base: '/', // ✅ changed for custom domain
 })
