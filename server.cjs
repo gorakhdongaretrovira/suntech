@@ -14,7 +14,7 @@ app.use(express.json());
 function getLogoBase64() {
   try {
     // Adjust this path to wherever your logo.jpeg lives relative to server.js
-    const logoPath = path.join(__dirname, "../frontend/public/logo.jpeg");
+    const logoPath = path.join(__dirname, "public/logo.jpeg");
     const data = fs.readFileSync(logoPath);
     return `data:image/jpeg;base64,${data.toString("base64")}`;
   } catch {

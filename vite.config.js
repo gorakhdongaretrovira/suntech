@@ -9,3 +9,4 @@ export default defineConfig({
       include: ['leaflet', 'react-leaflet'],
   },
 })
+ 
