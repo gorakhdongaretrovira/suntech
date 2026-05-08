@@ -8,7 +8,6 @@ import Applications from "./pages/Applications";
 import Media from "./pages/Media";
 import Video from "./pages/Videos";
 import Contact from "./pages/Contact";
-
 import Home from "./pages/Home";
 import About from "./pages/About";
 import MachinePage from "./pages/MachinePage";
@@ -22,8 +21,6 @@ import WhatsAppButton from "./components/common/WhatsAppButton";
 const Services = () => (
   <div className="text-white text-3xl text-center mt-20">Services Page</div>
 );
-
-
 
 const NotFound = () => (
   <div className="text-white text-3xl text-center mt-20">404 – Page Not Found</div>
@@ -42,36 +39,24 @@ export default function App() {
 
           <div className="pt-20 flex-1">
             <Routes>
-              <Route path="/"                   element={<Home />} />
-              <Route path="/about"              element={<About />} />
-              <Route path="/services"           element={<Services />} />
-              <Route path="/solutions"          element={<Solutions />} />
-              <Route path="/media"              element={<Media />} />
-              <Route path="/media/videos"       element={<Video />} />
-              <Route path="/contact"            element={<Contact />} />
-
-              {/* Machine category pages */}
-              <Route path="/machines/:type"     element={<MachinePage />} />
-
-              {/* Product detail page */}
-              <Route path="/product/:name"      element={<ProductDetail />} />
-
-              {/* Applications page — query param: ?type=Namkeen */}
-              <Route path="/applications"       element={<Applications />} />
-
-
-<Route path="/solutions" element={<Solutions />} />
-
-<Route path="/projects" element={<Projects />} />
-<Route path="/brochure" element={<Brochure />} />
-<Route path="/faq" element={<FAQ />} />
-
-              <Route path="*"                   element={<NotFound />} />
+              <Route path="/"               element={<Home />} />
+              <Route path="/about"          element={<About />} />
+              <Route path="/services"       element={<Services />} />
+              <Route path="/solutions"      element={<Solutions />} />
+              <Route path="/media"          element={<Media />} />
+              <Route path="/media/videos"   element={<Video />} />
+              <Route path="/contact"        element={<Contact />} />
+              <Route path="/machines/:type" element={<MachinePage />} />
+              <Route path="/product/:name"  element={<ProductDetail />} />
+              <Route path="/applications"   element={<Applications />} />
+              <Route path="/projects"       element={<Projects />} />
+              <Route path="/brochure"       element={<Brochure />} />
+              <Route path="/faq"            element={<FAQ />} />
+              <Route path="*"               element={<NotFound />} />
             </Routes>
           </div>
 
           <Footer />
-
           <WhatsAppButton />
         </div>
       )}
