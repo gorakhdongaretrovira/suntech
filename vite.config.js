@@ -7,6 +7,11 @@ export default defineConfig({
   // GitHub Pages deployment
   base: '/suntech/',
 
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+  },
+
   optimizeDeps: {
     include: ['leaflet', 'react-leaflet'],
   },
