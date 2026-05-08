@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 
-  // GitHub Pages deployment
-  base: '/suntech/',
+  // Custom domain
+  base: '/',
 
   server: {
     host: '0.0.0.0',
