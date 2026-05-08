@@ -1,25 +1,24 @@
-/**
- * Hero.jsx — SUNTECH Premium Manufacturing Hero
- * Mobile-first responsive: stacked layout on mobile, side-by-side on desktop
- * Map fully visible on mobile, text compact below
- * Colors: Navy #0B2A4A | Orange #FF8C00
- */
+/* ==========================================================================
+   HERO.JSX — FULL FINAL VERSION
+   PART 1
+========================================================================== */
 
 import React, { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+} from "react-leaflet";
+
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-/* ══════════════════════════════════════════════════════════
-   BRAND TOKENS
-══════════════════════════════════════════════════════════ */
-const NAVY   = "#111827";
+const NAVY = "#111827";
 const ORANGE = "#FF8C00";
-const WHITE  = "#FFFFFF";
+const WHITE = "#FFFFFF";
 
-/* ══════════════════════════════════════════════════════════
-   CITY DATA
-══════════════════════════════════════════════════════════ */
 const CITIES = [
   {
     id: "nagpur",
@@ -28,9 +27,14 @@ const CITIES = [
     lng: 79.0882,
     isHQ: true,
     installs: 87,
-    machines: ["VFFS Machine", "Powder Filler", "Band Sealer"],
+    machines: [
+      "VFFS Machine",
+      "Powder Filler",
+      "Band Sealer",
+    ],
     since: 2008,
   },
+
   {
     id: "pune",
     label: "Pune",
@@ -38,9 +42,14 @@ const CITIES = [
     lng: 73.8567,
     isHQ: false,
     installs: 96,
-    machines: ["VFFS Machine", "Strapping Machine", "Coding Machine"],
+    machines: [
+      "VFFS Machine",
+      "Strapping Machine",
+      "Coding Machine",
+    ],
     since: 2012,
   },
+
   {
     id: "mumbai",
     label: "Mumbai",
@@ -48,9 +57,14 @@ const CITIES = [
     lng: 72.8777,
     isHQ: false,
     installs: 124,
-    machines: ["Liquid Filler", "Label Applicator", "Vacuum Pack"],
+    machines: [
+      "Liquid Filler",
+      "Label Applicator",
+      "Vacuum Pack",
+    ],
     since: 2011,
   },
+
   {
     id: "nashik",
     label: "Nashik",
@@ -58,9 +72,14 @@ const CITIES = [
     lng: 73.7898,
     isHQ: false,
     installs: 54,
-    machines: ["Powder Filler", "Pouch Packaging", "Sealing Machine"],
+    machines: [
+      "Powder Filler",
+      "Pouch Packaging",
+      "Sealing Machine",
+    ],
     since: 2015,
   },
+
   {
     id: "aurangabad",
     label: "Aurangabad",
@@ -68,92 +87,289 @@ const CITIES = [
     lng: 75.3433,
     isHQ: false,
     installs: 43,
-    machines: ["VFFS Machine", "Nitrogen Flushing", "Labelling Machine"],
+    machines: [
+      "VFFS Machine",
+      "Nitrogen Flushing",
+      "Labelling Machine",
+    ],
     since: 2017,
   },
 ];
 
-const MAX_INSTALLS = Math.max(...CITIES.map((c) => c.installs));
+const MAX_INSTALLS = Math.max(
+  ...CITIES.map((c) => c.installs)
+);
 
-/* ══════════════════════════════════════════════════════════
-   MARKER ICON BUILDER
-══════════════════════════════════════════════════════════ */
-function buildMarkerIcon(city, isMobile) {
-  const baseSize = isMobile ? (city.isHQ ? 36 : 22) : (city.isHQ ? 44 : Math.max(24, 18 + (city.installs / MAX_INSTALLS) * 14));
-  const size  = baseSize;
-  const cx    = size / 2;
-  const rRing = cx * 0.80;
+/* ==========================================================================
+   MARKER ICON
+========================================================================== */
+
+function buildMarkerIcon(city, screenW) {
+  const sm = screenW < 480;
+
+  const size = sm
+    ? city.isHQ
+      ? 30
+      : 18
+    : screenW < 768
+    ? city.isHQ
+      ? 36
+      : 22
+    : city.isHQ
+    ? 44
+    : Math.max(
+        24,
+        18 + (city.installs / MAX_INSTALLS) * 14
+      );
+
+  const cx = size / 2;
+
+  const rRing = cx * 0.8;
   const rFill = cx * 0.46;
   const rCore = cx * 0.22;
 
   const pulse = city.isHQ
-    ? `<circle cx="${cx}" cy="${cx}" r="${rRing}" fill="${ORANGE}" opacity="0">
-         <animate attributeName="r"       values="${rRing*0.65};${rRing*1.5}" dur="2.2s" repeatCount="indefinite"/>
-         <animate attributeName="opacity" values="0.45;0"                    dur="2.2s" repeatCount="indefinite"/>
-       </circle>`
+    ? `
+      <circle
+        cx="${cx}"
+        cy="${cx}"
+        r="${rRing}"
+        fill="${ORANGE}"
+        opacity="0"
+      >
+        <animate
+          attributeName="r"
+          values="${rRing * 0.65};${rRing * 1.5}"
+          dur="2.2s"
+          repeatCount="indefinite"
+        />
+
+        <animate
+          attributeName="opacity"
+          values="0.45;0"
+          dur="2.2s"
+          repeatCount="indefinite"
+        />
+      </circle>
+    `
     : "";
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+  const svg = `
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="${size}"
+    height="${size}"
+    viewBox="0 0 ${size} ${size}"
+  >
     ${pulse}
-    <circle cx="${cx}" cy="${cx}" r="${rRing}" fill="none" stroke="${ORANGE}" stroke-width="1.1" opacity="0.25"/>
-    <circle cx="${cx}" cy="${cx}" r="${rFill}" fill="${ORANGE}" opacity="0.90"/>
-    <circle cx="${cx}" cy="${cx}" r="${rCore}" fill="white"   opacity="0.96"/>
-  </svg>`;
+
+    <circle
+      cx="${cx}"
+      cy="${cx}"
+      r="${rRing}"
+      fill="none"
+      stroke="${ORANGE}"
+      stroke-width="1.1"
+      opacity="0.25"
+    />
+
+    <circle
+      cx="${cx}"
+      cy="${cx}"
+      r="${rFill}"
+      fill="${ORANGE}"
+      opacity="0.90"
+    />
+
+    <circle
+      cx="${cx}"
+      cy="${cx}"
+      r="${rCore}"
+      fill="white"
+      opacity="0.96"
+    />
+  </svg>
+  `;
 
   return L.divIcon({
     html: svg,
     className: "",
-    iconSize:   [size, size],
+    iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
 }
 
-/* ══════════════════════════════════════════════════════════
-   POPUP CARD CONTENT
-══════════════════════════════════════════════════════════ */
+/* ==========================================================================
+   POPUP CARD
+========================================================================== */
+
 function PopupCard({ city }) {
-  const pct = Math.round((city.installs / MAX_INSTALLS) * 100);
+  const pct = Math.round(
+    (city.installs / MAX_INSTALLS) * 100
+  );
+
   return (
-    <div style={{
-      fontFamily: "'Segoe UI', system-ui, sans-serif",
-      minWidth: 190,
-      padding: "14px 16px 12px",
-      background: WHITE,
-      borderRadius: 12,
-      boxShadow: "0 8px 32px rgba(11,42,74,0.18)",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-        <span style={{ fontWeight: 800, fontSize: 15, color: NAVY, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+    <div
+      style={{
+        fontFamily:
+          "'Segoe UI',system-ui,sans-serif",
+
+        minWidth: 170,
+
+        padding: "11px 13px 10px",
+
+        background: WHITE,
+
+        borderRadius: 10,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          marginBottom: 2,
+        }}
+      >
+        <span
+          style={{
+            fontWeight: 800,
+            fontSize: 13,
+            color: NAVY,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+        >
           {city.label}
         </span>
+
         {city.isHQ && (
-          <span style={{
-            fontSize: 9, fontWeight: 800, color: ORANGE,
-            border: `1.5px solid ${ORANGE}`, borderRadius: 4,
-            padding: "2px 7px", letterSpacing: "0.18em", textTransform: "uppercase",
-          }}>HQ</span>
+          <span
+            style={{
+              fontSize: 8,
+              fontWeight: 800,
+              color: ORANGE,
+              border: `1.5px solid ${ORANGE}`,
+              borderRadius: 3,
+              padding: "1px 5px",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+            }}
+          >
+            HQ
+          </span>
         )}
       </div>
-      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.38)", marginBottom: 10, letterSpacing: "0.04em" }}>
+
+      <div
+        style={{
+          fontSize: 9,
+          color: "#888",
+          marginBottom: 7,
+        }}
+      >
         Partner since {city.since}
       </div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8 }}>
-        <span style={{ fontSize: 28, fontWeight: 900, color: ORANGE, lineHeight: 1 }}>{city.installs}</span>
-        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Installations</span>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: 5,
+          marginBottom: 7,
+        }}
+      >
+        <span
+          style={{
+            fontSize: 24,
+            fontWeight: 900,
+            color: ORANGE,
+            lineHeight: 1,
+          }}
+        >
+          {city.installs}
+        </span>
+
+        <span
+          style={{
+            fontSize: 10,
+            color: "#666",
+            fontWeight: 600,
+          }}
+        >
+          Installations
+        </span>
       </div>
-      <div style={{ height: 4, background: "rgba(255,255,255,0.1)", borderRadius: 2, marginBottom: 12, overflow: "hidden" }}>
-        <div style={{
-          height: "100%", borderRadius: 2, width: `${pct}%`,
-          background: `linear-gradient(90deg, ${ORANGE}, #ffb347)`,
-        }} />
+
+      <div
+        style={{
+          height: 3,
+          background: "rgba(0,0,0,0.08)",
+          borderRadius: 2,
+          marginBottom: 9,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            borderRadius: 2,
+            width: `${pct}%`,
+            background: `linear-gradient(
+              90deg,
+              ${ORANGE},
+              #ffb347
+            )`,
+          }}
+        />
       </div>
-      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 6 }}>
-        Machines Installed
+
+      <div
+        style={{
+          fontSize: 8,
+          fontWeight: 700,
+          color: "#aaa",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          marginBottom: 5,
+        }}
+      >
+        Machines
       </div>
-      <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 4 }}>
+
+      <ul
+        style={{
+          listStyle: "none",
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+        }}
+      >
         {city.machines.map((m) => (
-          <li key={m} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: NAVY, fontWeight: 600 }}>
-            <span style={{ width: 5, height: 5, borderRadius: "50%", background: ORANGE, flexShrink: 0, display: "inline-block" }} />
+          <li
+            key={m}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              fontSize: 11,
+              color: NAVY,
+              fontWeight: 600,
+            }}
+          >
+            <span
+              style={{
+                width: 4,
+                height: 4,
+                borderRadius: "50%",
+                background: ORANGE,
+                flexShrink: 0,
+                display: "inline-block",
+              }}
+            />
+
             {m}
           </li>
         ))}
@@ -161,591 +377,777 @@ function PopupCard({ city }) {
     </div>
   );
 }
+/* ==========================================================================
+   HERO.JSX — FULL FINAL VERSION
+   PART 2
+========================================================================== */
 
-/* ══════════════════════════════════════════════════════════
-   GLOBAL CSS
-══════════════════════════════════════════════════════════ */
-const GLOBAL_CSS = `
-  .leaflet-popup-content-wrapper {
-    padding: 0 !important;
-    border-radius: 12px !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-  .leaflet-popup-content { margin: 0 !important; line-height: 1 !important; }
-  .leaflet-popup-tip-container { display: none !important; }
-  .leaflet-popup-close-button {
-    top: 8px !important; right: 8px !important;
-    color: rgba(255,255,255,0.6) !important; font-size: 16px !important;
-    font-weight: 400 !important; z-index: 10;
-  }
-  .leaflet-popup-close-button:hover { color: ${ORANGE} !important; }
-  .leaflet-container { background: #111827 !important; }
+/* ==========================================================================
+   SMART MARKER
+========================================================================== */
 
-  @keyframes heroFadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes badgePop {
-    from { opacity: 0; transform: scale(0.85); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  @keyframes statCount {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes blinkDot {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.3; }
-  }
+function SmartMarker({ city, screenW }) {
+  const map = useMap();
 
-  /* ── DESKTOP: overlay layout ── */
-  .hero-wrap {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 560px;
-    overflow: hidden;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: ${NAVY};
-  }
+  const markerRef = useRef(null);
 
-  .hero-map-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
+  const hoverTimer = useRef(null);
 
-  /* Desktop veils */
-  .hero-veil-left {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-      105deg,
-      rgba(17,24,39,0.92) 0%,
-      rgba(17,24,39,0.76) 36%,
-      rgba(17,24,39,0.22) 62%,
-      rgba(17,24,39,0.02) 100%
-    );
-  }
-  .hero-veil-bottom {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 120px;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(to top, rgba(17,24,39,0.55) 0%, transparent 100%);
-  }
-  .hero-veil-top {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 80px;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(to bottom, rgba(17,24,39,0.35) 0%, transparent 100%);
-  }
+  const isMobile = screenW < 768;
 
-  .hero-dot-grid {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
+  const icon = buildMarkerIcon(city, screenW);
 
-  .hero-text-panel {
-    position: absolute;
-    z-index: 10;
-    top: 0; left: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 48px clamp(24px, 5vw, 72px);
-    max-width: 540px;
-  }
+  const openPopup = () =>
+    markerRef.current?.openPopup();
 
-  .hero-legend {
-    position: absolute;
-    bottom: 18px; right: 18px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(17,24,39,0.15);
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: ${NAVY};
-    box-shadow: 0 4px 18px rgba(17,24,39,0.2);
-  }
-
-  /* ── MOBILE: stacked layout ── */
-  @media (max-width: 640px) {
-    .hero-wrap {
-      height: auto;
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Map takes top portion, fixed height */
-    .hero-map-layer {
-      position: relative !important;
-      inset: unset !important;
-      width: 100%;
-      height: 52vmax;
-      min-height: 260px;
-      max-height: 360px;
-      flex-shrink: 0;
-      z-index: 0;
-    }
-
-    /* Hide desktop veils on mobile */
-    .hero-veil-left,
-    .hero-veil-bottom,
-    .hero-veil-top,
-    .hero-dot-grid {
-      display: none !important;
-    }
-
-    /* Text panel becomes normal flow below map */
-    .hero-text-panel {
-      position: relative !important;
-      inset: unset !important;
-      max-width: 100%;
-      background: ${NAVY};
-      padding: 22px 20px 28px;
-      justify-content: flex-start;
-      flex: 1;
-    }
-
-    /* Legend goes inside map layer on mobile */
-    .hero-legend {
-      bottom: 8px;
-      right: 8px;
-      padding: 6px 10px;
-      font-size: 9px;
-      gap: 7px;
-      border-radius: 8px;
-    }
-  }
-
-  /* Stat grid responsive */
-  .hero-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background: rgba(17,24,39,0.65);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(17,24,39,0.3);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  @media (max-width: 640px) {
-    .hero-stats {
-      grid-template-columns: repeat(4, 1fr);
-      background: rgba(17,24,39,0.45);
-      margin-bottom: 16px;
-    }
-  }
-
-  /* CTA row */
-  .hero-ctas {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  @media (max-width: 380px) {
-    .hero-ctas { flex-direction: column; }
-    .hero-ctas a { text-align: center; }
-  }
-
-  /* Certs */
-  .hero-certs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  /* Headline */
-  .hero-headline {
-    font-size: clamp(38px, 7vw, 80px);
-    font-weight: 900;
-    line-height: 0.95;
-    color: ${WHITE};
-    margin: 0 0 14px;
-    letter-spacing: -0.02em;
-    text-shadow: 0 2px 24px rgba(0,0,0,0.35);
-  }
-  @media (max-width: 640px) {
-    .hero-headline {
-      font-size: clamp(32px, 9vw, 46px);
-      margin-bottom: 10px;
-      line-height: 1.0;
-    }
-  }
-
-  /* Description */
-  .hero-desc {
-    font-size: clamp(12px, 1.8vw, 15px);
-    line-height: 1.75;
-    color: rgba(255,255,255,0.60);
-    font-weight: 400;
-    margin-bottom: 20px;
-    max-width: 390px;
-  }
-  @media (max-width: 640px) {
-    .hero-desc {
-      font-size: 13px;
-      margin-bottom: 16px;
-      max-width: 100%;
-    }
-  }
-
-  /* Badge */
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,140,0,0.15);
-    border: 1px solid rgba(255,140,0,0.4);
-    border-radius: 4px;
-    padding: 5px 12px;
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: ${ORANGE};
-    margin-bottom: 16px;
-    width: fit-content;
-    animation: badgePop 0.5s 0.1s both;
-  }
-  @media (max-width: 640px) {
-    .hero-badge {
-      font-size: 8px;
-      padding: 4px 10px;
-      margin-bottom: 12px;
-      letter-spacing: 0.18em;
-    }
-  }
-
-  /* Divider */
-  .hero-divider {
-    width: 40px;
-    height: 3px;
-    background: ${ORANGE};
-    border-radius: 2px;
-    margin-bottom: 14px;
-    opacity: 0.7;
-  }
-  @media (max-width: 640px) {
-    .hero-divider { margin-bottom: 10px; }
-  }
-
-  /* Stat items */
-  .hero-stat-item {
-    padding: 12px 6px 10px;
-    text-align: center;
-    border-right: 1px solid rgba(17,24,39,0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .hero-stat-num {
-    font-size: clamp(16px, 2.5vw, 26px);
-    font-weight: 900;
-    color: ${WHITE};
-    line-height: 1;
-  }
-  .hero-stat-lbl {
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-  }
-  @media (max-width: 640px) {
-    .hero-stat-num { font-size: 18px; }
-    .hero-stat-lbl { font-size: 7px; letter-spacing: 0.08em; }
-    .hero-stat-item { padding: 10px 4px 8px; }
-  }
-
-  /* Cert chips */
-  .hero-cert-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    background: rgba(17,24,39,0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(17,24,39,0.35);
-    border-radius: 100px;
-    padding: 4px 10px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.38);
-  }
-  @media (max-width: 640px) {
-    .hero-cert-chip {
-      font-size: 8px;
-      padding: 3px 9px;
-    }
-  }
-`;
-
-/* ══════════════════════════════════════════════════════════
-   MAIN HERO COMPONENT
-══════════════════════════════════════════════════════════ */
-export default function Hero() {
-  const [loaded, setLoaded]     = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const mapRef = useRef(null);
+  const closePopup = () =>
+    markerRef.current?.closePopup();
 
   useEffect(() => {
-    const tag = document.createElement("style");
-    tag.textContent = GLOBAL_CSS;
-    document.head.appendChild(tag);
+    const marker = markerRef.current;
 
-    const checkMobile = () => setIsMobile(window.innerWidth <= 640);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    if (!marker) return;
 
-    const t = setTimeout(() => setLoaded(true), 180);
-    return () => {
-      clearTimeout(t);
-      document.head.removeChild(tag);
-      window.removeEventListener("resize", checkMobile);
+    const onOver = () => {
+      clearTimeout(hoverTimer.current);
+      openPopup();
     };
-  }, []);
 
-  // Properly initialize and resize Leaflet map
+    const onOut = () => {
+      hoverTimer.current = setTimeout(
+        closePopup,
+        220
+      );
+    };
+
+    const onClick = () => {
+      markerRef.current?.isPopupOpen()
+        ? closePopup()
+        : openPopup();
+    };
+
+    if (!isMobile) {
+      marker.on("mouseover", onOver);
+      marker.on("mouseout", onOut);
+    }
+
+    marker.on("click", onClick);
+
+    return () => {
+      clearTimeout(hoverTimer.current);
+
+      marker.off("mouseover", onOver);
+      marker.off("mouseout", onOut);
+      marker.off("click", onClick);
+    };
+  }, [isMobile]);
+
   useEffect(() => {
-    if (!mapRef.current) return;
-    
-    // Small timeout to ensure Leaflet has finished initial render
-    const resizeTimer = setTimeout(() => {
-      mapRef.current?.invalidateSize();
-    }, 300);
+    const fn = () => closePopup();
 
-    // Handle window resize
-    const handleResize = () => {
-      if (mapRef.current) {
-        mapRef.current.invalidateSize();
-      }
-    };
-    window.addEventListener("resize", handleResize);
+    map.on("click", fn);
 
-    return () => {
-      clearTimeout(resizeTimer);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [loaded]);
-
-  // Map config differs: mobile centers slightly differently, higher zoom
-  const mapCenter = isMobile ? [19.6, 76.0] : [19.8, 76.2];
-  const mapZoom   = isMobile ? 6.2 : 7;
-
-  function MarkerWithHover({ city }) {
-    const icon = buildMarkerIcon(city, isMobile);
-    return (
-      <Marker
-        position={[city.lat, city.lng]}
-        icon={icon}
-        zIndexOffset={city.isHQ ? 1000 : 0}
-      >
-        <Popup autoClose maxWidth={220}>
-          <PopupCard city={city} />
-        </Popup>
-      </Marker>
-    );
-  }
+    return () => map.off("click", fn);
+  }, [map]);
 
   return (
-    <section className="hero-wrap">
+    <Marker
+      ref={markerRef}
+      position={[city.lat, city.lng]}
+      icon={icon}
+      zIndexOffset={city.isHQ ? 1000 : 0}
+    >
+      <Popup
+        closeButton={false}
+        autoClose={false}
+        closeOnClick={false}
+        maxWidth={210}
+        className="hw-popup"
+      >
+        <PopupCard city={city} />
+      </Popup>
+    </Marker>
+  );
+}
 
-      {/* ── MAP ── */}
-      <div className="hero-map-layer">
-       <MapContainer
-  ref={mapRef}
+/* ==========================================================================
+   MAP RESIZER
+========================================================================== */
+
+function MapResizer() {
+  const map = useMap();
+
+  useEffect(() => {
+    const fn = () => map.invalidateSize();
+
+    window.addEventListener("resize", fn);
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        fn
+      );
+  }, [map]);
+
+  return null;
+}
+
+/* ==========================================================================
+   MAIN COMPONENT
+========================================================================== */
+
+export default function Hero() {
+  const [screenW, setScreenW] =
+    useState(window.innerWidth);
+
+  useEffect(() => {
+    const onResize = () =>
+      setScreenW(window.innerWidth);
+
+    window.addEventListener(
+      "resize",
+      onResize
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        onResize
+      );
+  }, []);
+
+  /* MOBILE MAP FIX */
+  const mapCenter =
+    screenW < 400
+      ? [20.1, 75.8]
+      : screenW < 600
+      ? [20.0, 75.9]
+      : [19.8, 76.2];
+
+  const mapZoom =
+    screenW < 480 ? 6.4 : 6.8;
+
+  return (
+    <section className="hw">
+
+      {/* MAP */}
+
+      <div className="hw-map">
+
+        <MapContainer
           center={mapCenter}
           zoom={mapZoom}
           zoomControl={false}
           attributionControl={false}
-          dragging={isMobile}
           scrollWheelZoom={false}
+          dragging={true}
           doubleClickZoom={false}
-          boxZoom={false}
-          keyboard={false}
-          touchZoom={isMobile}
-          style={{ width: "100%", height: "100%" }}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
         >
+          <MapResizer />
+
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             subdomains="abcd"
-            maxZoom={19}
           />
+
           {CITIES.map((city) => (
-            <MarkerWithHover key={city.id} city={city} />
+            <SmartMarker
+              key={city.id}
+              city={city}
+              screenW={screenW}
+            />
           ))}
         </MapContainer>
-
-        {/* Legend — visible in both layouts */}
-        <div className="hero-legend" style={{ opacity: loaded ? 1 : 0, transition: "opacity 0.7s ease 0.8s" }}>
-          <LegendDot color={ORANGE} pulse /> HQ — Nagpur
-          <span style={{ width: 1, height: 12, background: "rgba(17,24,39,0.3)", display: "inline-block" }} />
-          <span style={{ color: ORANGE, fontWeight: 800 }}>
-            {CITIES.reduce((a, c) => a + c.installs, 0)} Total
-          </span>
-        </div>
       </div>
 
-      {/* Desktop-only veils */}
-      <div className="hero-veil-left"   aria-hidden="true" style={{ opacity: 0.85 }} />
-      <div className="hero-veil-bottom" aria-hidden="true" style={{ opacity: 0.70 }} />
-      <div className="hero-veil-top"    aria-hidden="true" style={{ opacity: 0.60 }} />
-      <div className="hero-dot-grid"    aria-hidden="true" style={{ opacity: 0.04 }} />
+      {/* OVERLAYS */}
 
-      {/* ── TEXT PANEL ── */}
-      <div
-        className="hero-text-panel"
-        style={{
-          opacity:    loaded ? 1 : 0,
-          transform:  loaded ? "translateY(0)" : "translateY(24px)",
-          transition: "opacity 0.9s cubic-bezier(.22,1,.36,1), transform 0.9s cubic-bezier(.22,1,.36,1)",
-        }}
-      >
-        {/* Badge */}
-        <div className="hero-badge">
-          <span style={{
-            display: "inline-block", width: 6, height: 6,
-            borderRadius: "50%", background: ORANGE,
-            animation: "blinkDot 2s infinite",
-          }} />
-          Industrial Packaging Solutions
+      <div className="hw-veil-l" />
+
+      <div className="hw-dots" />
+
+      {/* CONTENT */}
+
+      <div className="hw-text">
+
+        <div className="hw-badge">
+          ● INDUSTRIAL PACKAGING SOLUTIONS
         </div>
 
-        {/* Headline */}
-        <h6 className="hero-headline" style={{ fontFamily: "'Inter', sans-serif" }}>
+        {/* FIXED H1 ISSUE */}
+
+        <h3 className="hw-h1">
           Engineering
           <br />
-          <span style={{ color: ORANGE, fontStyle: "italic" }}>Precision</span>
+
+          <span
+            style={{
+              color: ORANGE,
+              fontStyle: "italic",
+            }}
+          >
+            Precision
+          </span>
+
           <br />
+
           Machines
-        </h6>
+        </h3>
 
-        {/* Divider */}
-        <div className="hero-divider" />
+        <div className="hw-div" />
 
-        {/* Desc */}
-        <p className="hero-desc">
-          SUNTECH delivers industrial-grade packaging machinery built for
-          speed, scale, and reliability — trusted by manufacturers across
-          Maharashtra and 40+ Cities worldwide.
+        <p className="hw-desc">
+          SUNTECH delivers industrial-grade
+          packaging machinery built for speed,
+          scale, and reliability — trusted by
+          manufacturers across Maharashtra
+          and 40+ cities worldwide.
         </p>
 
-        {/* Stats */}
-        <div className="hero-stats">
+        {/* STATS */}
+
+        <div className="hw-stats">
+
           {[
-            { value: "500+", label: "Installs" },
-            { value: "40+",  label: "Cities" },
-            { value: "99%",  label: "Uptime" },
-            { value: "24h",  label: "Support" },
-          ].map(({ value, label }, i) => (
+            {
+              value: "500+",
+              label: "Installs",
+            },
+
+            {
+              value: "40+",
+              label: "Cities",
+            },
+
+            {
+              value: "99%",
+              label: "Uptime",
+            },
+
+            {
+              value: "24h",
+              label: "Support",
+            },
+          ].map(({ value, label }) => (
             <div
               key={label}
-              className="hero-stat-item"
-              style={{
-                animation: loaded ? `statCount 0.6s ${0.3 + i * 0.1}s both` : "none",
-              }}
+              className="hw-stat"
             >
-              <span className="hero-stat-num">{value}</span>
-              <span className="hero-stat-lbl">{label}</span>
+              <span className="hw-stat-n">
+                {value}
+              </span>
+
+              <span className="hw-stat-l">
+                {label}
+              </span>
             </div>
           ))}
         </div>
 
-        {/* CTAs */}
-        <div className="hero-ctas">
-          <CTAButton primary href="/machines">Explore Machines →</CTAButton>
-          <CTAButton primary={false} href="/contact">Request a Quote</CTAButton>
+        {/* CTA */}
+
+        <div className="hw-ctas">
+
+          <a
+            href="/machines"
+            className="hw-btn hw-btn-p"
+          >
+            Explore Machines →
+          </a>
+
+          <a
+            href="/contact"
+            className="hw-btn hw-btn-s"
+          >
+            Request a Quote
+          </a>
         </div>
 
-        {/* Certs */}
-        <div className="hero-certs">
-          {["ISO 9001", "CE Mark", "FSSAI", "Export Ready"].map((c) => (
-            <span key={c} className="hero-cert-chip">✓ {c}</span>
+        {/* CERTIFICATIONS */}
+
+        <div className="hw-certs">
+
+          {[
+            "ISO 9001",
+            "CE Mark",
+            "FSSAI",
+            "Export Ready",
+          ].map((c) => (
+            <span
+              key={c}
+              className="hw-chip"
+            >
+              ✓ {c}
+            </span>
           ))}
         </div>
       </div>
+      /* ==========================================================================
+   HERO.JSX — FULL FINAL VERSION
+   PART 3 (CSS + END)
+========================================================================== */
 
+      {/* CSS */}
+
+      <style>{`
+
+        * {
+          box-sizing:border-box;
+        }
+
+        .leaflet-container {
+          background:${NAVY};
+        }
+
+        .leaflet-popup-content-wrapper {
+          border-radius:12px;
+          padding:0;
+          overflow:hidden;
+        }
+
+        .leaflet-popup-content {
+          margin:0;
+        }
+
+        .leaflet-popup-tip {
+          background:white;
+        }
+
+        .hw {
+          position:relative;
+
+          width:100%;
+
+          height:100svh;
+
+          min-height:740px;
+
+          overflow:hidden;
+
+          background:${NAVY};
+
+          font-family:
+            'Inter',
+            sans-serif;
+        }
+
+        .hw-map {
+          position:absolute;
+
+          inset:0;
+
+          z-index:0;
+
+          overflow:hidden;
+        }
+
+        .hw-map .leaflet-container {
+          width:100%;
+          height:100%;
+        }
+
+        .hw-veil-l {
+          position:absolute;
+
+          inset:0;
+
+          z-index:1;
+
+          pointer-events:none;
+
+          background:linear-gradient(
+            105deg,
+            rgba(17,24,39,0.70) 0%,
+            rgba(17,24,39,0.52) 28%,
+            rgba(17,24,39,0.18) 58%,
+            rgba(17,24,39,0.02) 100%
+          );
+        }
+
+        .hw-dots {
+          position:absolute;
+
+          inset:0;
+
+          z-index:1;
+
+          pointer-events:none;
+
+          background-image:
+            radial-gradient(
+              rgba(255,255,255,0.04) 1px,
+              transparent 1px
+            );
+
+          background-size:28px 28px;
+        }
+
+        .hw-text {
+          position:absolute;
+
+          z-index:10;
+
+          left:0;
+          right:0;
+          bottom:0;
+
+          display:flex;
+
+          flex-direction:column;
+
+          justify-content:flex-end;
+
+          width:min(92%,520px);
+
+          padding-top:
+            clamp(20px,3vh,40px);
+
+          padding-bottom:
+            clamp(18px,4vh,42px);
+
+          padding-left:
+            clamp(16px,4vw,72px);
+
+          padding-right:
+            clamp(16px,3vw,32px);
+        }
+
+        .hw-badge {
+          display:inline-flex;
+
+          align-items:center;
+
+          gap:6px;
+
+          width:fit-content;
+
+          background:
+            rgba(255,140,0,0.12);
+
+          border:
+            1px solid rgba(255,140,0,0.35);
+
+          border-radius:4px;
+
+          padding:4px 10px;
+
+          font-size:
+            clamp(0.42rem,1vw,0.54rem);
+
+          font-weight:800;
+
+          letter-spacing:0.18em;
+
+          text-transform:uppercase;
+
+          color:${ORANGE};
+
+          margin-bottom:12px;
+        }
+
+        /* FIXED ENGINEERING BREAK ISSUE */
+
+        .hw-h1 {
+          font-size:
+            clamp(2.4rem,6vw,5rem);
+
+          font-weight:900;
+
+          line-height:0.88;
+
+          color:${WHITE};
+
+          margin:
+            0 0 clamp(6px,1vh,10px);
+
+          letter-spacing:-0.04em;
+
+          text-wrap:balance;
+
+          word-break:normal;
+
+          overflow-wrap:normal;
+
+          max-width:100%;
+
+          text-shadow:
+            0 2px 24px rgba(0,0,0,0.35);
+        }
+
+        .hw-div {
+          width:
+            clamp(24px,5vw,40px);
+
+          height:3px;
+
+          background:${ORANGE};
+
+          border-radius:2px;
+
+          margin-bottom:
+            clamp(6px,1.2vh,12px);
+        }
+
+        .hw-desc {
+          font-size:
+            clamp(0.72rem,1.7vw,0.92rem);
+
+          line-height:1.45;
+
+          color:
+            rgba(255,255,255,0.68);
+
+          margin-bottom:
+            clamp(8px,1.6vh,16px);
+
+          max-width:92%;
+        }
+
+        .hw-stats {
+          display:grid;
+
+          grid-template-columns:
+            repeat(4,1fr);
+
+          width:100%;
+
+          background:
+            rgba(17,24,39,0.52);
+
+          backdrop-filter:
+            blur(14px);
+
+          border:
+            1px solid rgba(255,255,255,0.07);
+
+          border-radius:8px;
+
+          overflow:hidden;
+
+          margin-bottom:14px;
+        }
+
+        .hw-stat {
+          padding:8px 4px;
+
+          text-align:center;
+
+          border-right:
+            1px solid rgba(255,255,255,0.06);
+
+          display:flex;
+
+          flex-direction:column;
+
+          gap:1px;
+        }
+
+        .hw-stat:last-child {
+          border-right:none;
+        }
+
+        .hw-stat-n {
+          font-size:
+            clamp(0.82rem,2vw,1.5rem);
+
+          font-weight:900;
+
+          color:${WHITE};
+
+          line-height:1;
+        }
+
+        .hw-stat-l {
+          font-size:
+            clamp(0.38rem,1vw,0.54rem);
+
+          font-weight:700;
+
+          letter-spacing:0.08em;
+
+          text-transform:uppercase;
+
+          color:
+            rgba(255,255,255,0.38);
+        }
+
+        .hw-ctas {
+          display:flex;
+
+          flex-wrap:wrap;
+
+          gap:8px;
+
+          margin-bottom:12px;
+        }
+
+        .hw-btn {
+          display:inline-flex;
+
+          align-items:center;
+
+          justify-content:center;
+
+          padding:9px 14px;
+
+          border-radius:5px;
+
+          font-size:
+            clamp(0.56rem,1.4vw,0.72rem);
+
+          font-weight:700;
+
+          letter-spacing:0.05em;
+
+          text-transform:uppercase;
+
+          text-decoration:none;
+
+          cursor:pointer;
+
+          transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+          border:none;
+        }
+
+        .hw-btn:hover {
+          transform:translateY(-1px);
+        }
+
+        .hw-btn-p {
+          background:${ORANGE};
+
+          color:${WHITE};
+
+          box-shadow:
+            0 8px 22px
+            rgba(255,140,0,0.24);
+        }
+
+        .hw-btn-s {
+          background:
+            rgba(255,255,255,0.10);
+
+          color:${WHITE};
+
+          border:
+            1px solid rgba(255,255,255,0.20);
+        }
+
+        .hw-certs {
+          display:flex;
+
+          flex-wrap:wrap;
+
+          gap:5px;
+        }
+
+        .hw-chip {
+          display:inline-flex;
+
+          align-items:center;
+
+          gap:3px;
+
+          background:
+            rgba(17,24,39,0.46);
+
+          border:
+            1px solid rgba(255,255,255,0.08);
+
+          border-radius:100px;
+
+          padding:3px 8px;
+
+          font-size:
+            clamp(0.40rem,1vw,0.54rem);
+
+          font-weight:700;
+
+          letter-spacing:0.08em;
+
+          text-transform:uppercase;
+
+          color:
+            rgba(255,255,255,0.42);
+        }
+
+        /* =====================================================
+           MOBILE FIXES
+        ===================================================== */
+
+        @media (max-width:479px) {
+
+          .leaflet-container {
+            transform:scale(1.08);
+
+            transform-origin:center;
+          }
+
+          .hw-map {
+            filter:
+              brightness(1.1)
+              contrast(1.05);
+          }
+
+          .hw {
+            min-height:100svh;
+          }
+
+          .hw-text {
+
+            justify-content:flex-end;
+
+            width:100%;
+
+            max-width:100%;
+
+            padding-left:18px;
+
+            padding-right:18px;
+
+            padding-bottom:20px;
+          }
+
+          .hw-h1 {
+            font-size:3.6rem;
+
+            line-height:0.86;
+
+            letter-spacing:-0.05em;
+
+            max-width:92%;
+          }
+
+          .hw-desc {
+            max-width:100%;
+          }
+
+          .hw-veil-l {
+
+            background:
+              linear-gradient(
+                180deg,
+                rgba(17,24,39,0.56) 0%,
+                rgba(17,24,39,0.44) 45%,
+                rgba(17,24,39,0.18) 75%,
+                rgba(17,24,39,0.02) 100%
+              );
+          }
+
+          .leaflet-popup-content-wrapper {
+            transform:scale(0.92);
+            transform-origin:bottom center;
+          }
+        }
+
+      `}</style>
     </section>
-  );
-}
-
-/* ── CTA Button ── */
-function CTAButton({ primary, href, children }) {
-  const [hovered, setHovered] = useState(false);
-  const base = primary
-    ? {
-        background: hovered ? "#e67e00" : ORANGE,
-        color: WHITE,
-        border: "none",
-        boxShadow: hovered ? "0 8px 24px rgba(255,140,0,0.45)" : "0 4px 16px rgba(255,140,0,0.35)",
-        transform: hovered ? "translateY(-2px)" : "translateY(0)",
-      }
-    : {
-        background: hovered ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.10)",
-        color: WHITE,
-        border: `1.5px solid rgba(255,255,255,${hovered ? 0.55 : 0.28})`,
-        boxShadow: "none",
-        transform: hovered ? "translateY(-2px)" : "translateY(0)",
-        backdropFilter: "blur(8px)",
-      };
-
-  return (
-    <a
-      href={href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "inline-flex", alignItems: "center", justifyContent: "center",
-        padding: "11px 22px",
-        borderRadius: 6,
-        fontFamily: "'Segoe UI', system-ui, sans-serif",
-        fontSize: 12, fontWeight: 700,
-        letterSpacing: "0.06em", textTransform: "uppercase",
-        textDecoration: "none",
-        transition: "all 0.22s ease",
-        cursor: "pointer",
-        whiteSpace: "nowrap",
-        ...base,
-      }}
-    >
-      {children}
-    </a>
-  );
-}
-
-/* ── Legend dot ── */
-function LegendDot({ color, pulse }) {
-  return (
-    <span style={{
-      display: "inline-block",
-      width: 8, height: 8, borderRadius: "50%",
-      background: color,
-      marginRight: 4,
-      boxShadow: pulse ? `0 0 0 3px rgba(255,140,0,0.22)` : "none",
-      animation: pulse ? "blinkDot 2s infinite" : "none",
-    }} />
   );
 }
