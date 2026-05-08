@@ -12,6 +12,10 @@ export default defineConfig({
     port: 5173,
   },
 
+  build: {
+    outDir: 'dist',
+  },
+
   optimizeDeps: {
     include: ['leaflet', 'react-leaflet'],
   },
