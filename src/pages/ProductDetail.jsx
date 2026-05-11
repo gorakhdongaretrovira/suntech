@@ -399,7 +399,7 @@ export default function ProductDetail() {
                   <label style={styles.formLabel}>Full Name</label>
                   <input
                     type="text"
-                    placeholder="e.g. Rajesh Kumar"
+                    placeholder="e.g. Shrinivas Reddy"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     style={styles.formInput}

@@ -58,7 +58,7 @@ export default function ContactSection() {
         </svg>
       ),
       label: "Sales Hotline",
-      value: "+91 00111 11111",
+      value: "+91 89750 91999",
     },
     {
       icon: (
@@ -78,7 +78,7 @@ export default function ContactSection() {
         </svg>
       ),
       label: "WhatsApp",
-      value: "+91 00111 11111",
+      value: "+91 89750 91999",
     },
   ];
 

@@ -199,13 +199,11 @@ body {
   }
   .vm-card:hover { transform: translateY(-4px); }
 
-  /* VISION — dark navy with amber accent */
   .vm-card-vision {
     background: #0d1526;
     border: 1.5px solid rgba(245,166,35,0.18);
     box-shadow: 0 8px 40px rgba(13,21,38,0.22);
   }
-  /* MISSION — white with brand accent bar */
   .vm-card-mission {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -260,7 +258,6 @@ body {
   .vm-card-vision .vm-heading { color: #ffffff; }
   .vm-card-mission .vm-heading { color: var(--blue-dark); }
 
-  /* the "we don't just deliver machines" tagline */
   .vm-tagline {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: clamp(15px, 3.5vw, 18px);
@@ -305,7 +302,6 @@ body {
   .vm-card-vision .vm-points li::before { background: var(--accent); }
   .vm-card-mission .vm-points li::before { background: var(--blue-brand); }
 
-  /* vision ambient glow */
   .vm-card-vision::after {
     content: '';
     position: absolute; top: -50px; right: -50px;
@@ -346,16 +342,208 @@ body {
     letter-spacing: .04em;
   }
 
+  /* ── FOUNDER / CEO SECTION ── */
+  .founder-section {
+    padding: 72px 24px;
+    background: #ffffff;
+    border-top: 1px solid var(--border);
+  }
+  .founder-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(17,24,39,0.08);
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .founder-img-wrap {
+    position: relative;
+    width: 100%;
+    background: #f0f4f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 320px;
+  }
+  .founder-img-wrap img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+  .founder-img-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 80px;
+    background: linear-gradient(transparent, #ffffff);
+    pointer-events: none;
+  }
+  .founder-body {
+    padding: 32px 28px 36px;
+  }
+  .founder-role-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-pale);
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 800; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .founder-role-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+  .founder-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(30px, 7vw, 44px);
+    font-weight: 900; line-height: 1.0;
+    color: var(--blue-dark);
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    margin-bottom: 6px;
+  }
+  .founder-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .founder-divider {
+    width: 48px; height: 3px;
+    background: var(--blue-brand);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .founder-bio {
+    font-size: 14.5px; line-height: 1.78;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 28px;
+  }
+  .founder-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .founder-stat {
+    background: var(--blue-pale);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .founder-stat-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px; font-weight: 900;
+    color: var(--blue-dark); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .founder-stat-val span { color: var(--accent); }
+  .founder-stat-lbl {
+    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--text-muted); font-weight: 600;
+  }
+  .founder-quote {
+    background: #0d1526;
+    border-radius: 10px;
+    padding: 20px 22px;
+    border-left: 4px solid var(--accent);
+    position: relative;
+  }
+  .founder-quote-mark {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px; font-weight: 900; line-height: 0.6;
+    color: rgba(245,166,35,0.2);
+    margin-bottom: 10px;
+    display: block;
+    user-select: none;
+  }
+  .founder-quote-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(16px, 4vw, 19px);
+    font-weight: 700; font-style: italic;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .founder-quote-attr {
+    font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    color: rgba(245,166,35,0.6);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+  }
+
+  /* pan-india presence */
+  .presence-card {
+    background: #0d1526;
+    border: 1.5px solid rgba(245,166,35,0.16);
+    border-radius: 14px;
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .presence-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), rgba(245,166,35,0.3));
+    border-radius: 14px 14px 0 0;
+  }
+  .presence-cities {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;
+  }
+  .city-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(200,220,245,0.75);
+    transition: background .2s, border-color .2s;
+  }
+  .city-tag:hover {
+    background: rgba(245,166,35,0.12);
+    border-color: rgba(245,166,35,0.3);
+    color: var(--accent);
+  }
+  .city-tag::before {
+    content: '📍';
+    font-size: 10px;
+  }
+
   @media (min-width: 600px) {
     .vm-grid { display: grid !important; grid-template-columns: 1fr 1fr; gap: 20px; }
     .clients-grid { grid-template-columns: repeat(3, 1fr); }
+    .founder-inner {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+    .founder-img-wrap {
+      min-height: 100%;
+      height: auto;
+    }
+    .founder-img-wrap img {
+      width: 100%; height: 100%; min-height: 460px;
+    }
+    .founder-img-overlay {
+      top: 0; bottom: 0; left: auto; right: 0; width: 60px; height: auto;
+      background: linear-gradient(90deg, transparent, #ffffff);
+    }
   }
 `;
 
 const MARQUEE_ITEMS = [
   "Packaging Machinery","Pharmaceutical","Food & Beverage",
   "Manufacturing","Export Quality","ISO Certified",
-  "Smart Automation","Custom Solutions","Established 2003",
+  "Smart Automation","Custom Solutions","Established 2011",
+  "Pan India Presence","200+ Projects","9+ Clients",
 ];
 
 const CLIENTS = [
@@ -374,6 +562,12 @@ const CLIENT_ICON_COLORS = [
   { bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
   { bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
   { bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
+];
+
+const CITIES = [
+  "Mumbai", "Pune", "Delhi NCR", "Ahmedabad", "Surat",
+  "Hyderabad", "Chennai", "Bengaluru", "Kolkata", "Nagpur",
+  "Nashik", "Vadodara",
 ];
 
 function useReveal() {
@@ -463,6 +657,188 @@ const ArrowIcon = () => (
   </svg>
 );
 
+/* ── FOUNDER SECTION ── */
+function FounderSection() {
+  return (
+    <section className="founder-section">
+      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+
+        <div className="section-label reveal">Leadership</div>
+        <h2
+          className="reveal reveal-d1"
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontSize: "clamp(30px, 6vw, 48px)",
+            fontWeight: 900, lineHeight: 1.05,
+            color: "var(--blue-dark)", textTransform: "uppercase",
+            letterSpacing: "-.01em", marginBottom: 32,
+          }}
+        >
+          The Vision<br />
+          <span style={{ color: "#f5a623" }}>Behind The Machine.</span>
+        </h2>
+
+        <div className="founder-card reveal reveal-d2">
+          <div className="founder-inner">
+
+            {/* Image */}
+            <div className="founder-img-wrap">
+              <img
+                src="/ceo.jpg"
+                alt="Founder & CEO — Suntech Packaging"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  e.target.parentNode.style.background = "#0d1526";
+                  e.target.parentNode.style.minHeight = "220px";
+                  const placeholder = document.createElement("div");
+                  placeholder.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;height:220px;gap:12px;";
+                  placeholder.innerHTML = '<div style="font-size:64px;">👷</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,166,35,0.6);">Photo Coming Soon</div>';
+                  e.target.parentNode.appendChild(placeholder);
+                }}
+              />
+              <div className="founder-img-overlay" />
+            </div>
+
+            {/* Body */}
+            <div className="founder-body">
+              <div className="founder-role-badge">Founder &amp; CEO</div>
+
+              <div className="founder-name">Shrinivas Reddy</div>
+              <div className="founder-title">Founder &amp; Chief Executive Officer</div>
+
+              <div className="founder-divider" />
+
+              <p className="founder-bio">
+                With over <strong style={{ color: "var(--blue-dark)" }}>14 years</strong> of deep-rooted expertise in industrial
+                packaging machinery, Shrinivas Reddy founded Suntech with one conviction —
+                that Indian manufacturers deserve world-class automation without
+                world-class price tags. Under his leadership, Suntech has grown from
+                a single workshop to a trusted name across 9+ industries and 12+ cities.
+                His hands-on approach to engineering and relentless focus on after-sales
+                support have become the DNA of every machine the company builds.
+              </p>
+
+              {/* Mini stats */}
+              <div className="founder-stats">
+                <div className="founder-stat">
+                  <div className="founder-stat-val">14<span>+</span></div>
+                  <div className="founder-stat-lbl">Years Experience</div>
+                </div>
+                <div className="founder-stat">
+                  <div className="founder-stat-val">200<span>+</span></div>
+                  <div className="founder-stat-lbl">Projects Delivered</div>
+                </div>
+                <div className="founder-stat">
+                  <div className="founder-stat-val">9<span>+</span></div>
+                  <div className="founder-stat-lbl">Industries Served</div>
+                </div>
+              </div>
+
+              {/* Quote */}
+              <div className="founder-quote">
+                <span className="founder-quote-mark">"</span>
+                <p className="founder-quote-text">
+                  A machine is only as good as the team that stands behind it — we don't just build equipment, we build partnerships.
+                </p>
+                <div className="founder-quote-attr">— Shrinivas Reddy, Founder &amp; CEO</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── PAN INDIA PRESENCE ── */
+function PanIndiaSection() {
+  return (
+    <section style={{ padding: "0 24px 72px", background: "#ffffff" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+
+        <div className="section-label reveal">Our Reach</div>
+        <h2
+          className="reveal reveal-d1"
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontSize: "clamp(30px, 6vw, 48px)",
+            fontWeight: 900, lineHeight: 1.05,
+            color: "var(--blue-dark)", textTransform: "uppercase",
+            letterSpacing: "-.01em", marginBottom: 32,
+          }}
+        >
+          Pan India<br />
+          <span style={{ color: "#f5a623" }}>Presence.</span>
+        </h2>
+
+        <div className="presence-card reveal reveal-d2">
+
+          {/* Header row */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+            <div>
+              <div style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: "clamp(36px, 8vw, 52px)",
+                fontWeight: 900, lineHeight: 1,
+                color: "#ffffff",
+                marginBottom: 6,
+              }}>
+                12<span style={{ color: "#f5a623" }}>+</span>
+              </div>
+              <div style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: 12, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase",
+                color: "rgba(200,220,245,0.5)",
+              }}>Cities Across India</div>
+            </div>
+
+            <div style={{ display: "flex", gap: 20 }}>
+              {[
+                { val: "9+", lbl: "Industries" },
+                { val: "200+", lbl: "Projects" },
+              ].map(({ val, lbl }) => (
+                <div key={lbl} style={{ textAlign: "center" }}>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: "clamp(24px, 5vw, 32px)", fontWeight: 900,
+                    color: "#f5a623", lineHeight: 1, marginBottom: 4,
+                  }}>{val}</div>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase",
+                    color: "rgba(200,220,245,0.45)",
+                  }}>{lbl}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: "rgba(255,255,255,0.07)", margin: "20px 0" }} />
+
+          <div style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase",
+            color: "rgba(245,166,35,0.6)", marginBottom: 4,
+          }}>
+            Active Locations
+          </div>
+
+          <div className="presence-cities">
+            {CITIES.map((city) => (
+              <span className="city-tag" key={city}>{city}</span>
+            ))}
+          </div>
+
+          
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
 export default function About() {
   useReveal();
 
@@ -487,7 +863,7 @@ export default function About() {
 
             <div className="reveal" style={{ marginBottom: 20 }}>
               <span className="tag-pill" style={{ background: "rgba(245,166,35,0.12)", border: "1.5px solid rgba(245,166,35,0.3)", color: "#f5a623" }}>
-                Established 2003
+                Established 2011
               </span>
             </div>
 
@@ -540,13 +916,10 @@ export default function About() {
               fontWeight: 900, lineHeight: 1.05,
               color: "#111827", textTransform: "uppercase",
               letterSpacing: "-.01em", marginBottom: 40,
-              background: "transparent", padding: 0, display: "block",
             }}
           >
             Precision. Scale.<br />
-            <span style={{ color: "#111827", fontStyle: "italic", background: "transparent", padding: 0, display: "inline" }}>
-              Reliability.
-            </span>
+            <span style={{ color: "#111827", fontStyle: "italic" }}>Reliability.</span>
           </h2>
 
           <div>
@@ -585,61 +958,41 @@ export default function About() {
                 overflow: "hidden",
               }}
             >
-              {/* subtle grid */}
               <div style={{
                 position: "absolute", inset: 0, pointerEvents: "none",
                 backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
                 backgroundSize: "36px 36px",
               }} />
-              {/* top amber line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "#f5a623", borderRadius: "14px 14px 0 0" }} />
 
-              {/* quote mark */}
               <div style={{
                 fontFamily: "'Barlow Condensed', sans-serif",
                 fontSize: 72, fontWeight: 900, lineHeight: 0.7,
                 color: "rgba(245,166,35,0.18)",
-                marginBottom: 16,
-                position: "relative", zIndex: 1,
+                marginBottom: 16, position: "relative", zIndex: 1,
                 userSelect: "none",
-              }}>
-                "
-              </div>
+              }}>"</div>
 
-              <p
-                style={{
-                  fontFamily: "'Barlow Condensed', sans-serif",
-                  fontSize: "clamp(22px, 5.5vw, 34px)",
-                  fontWeight: 800,
-                  fontStyle: "italic",
-                  lineHeight: 1.25,
-                  color: "#ffffff",
-                  position: "relative", zIndex: 1,
-                  marginBottom: 20,
-                  letterSpacing: "-.01em",
-                }}
-              >
+              <p style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: "clamp(22px, 5.5vw, 34px)",
+                fontWeight: 800, fontStyle: "italic",
+                lineHeight: 1.25, color: "#ffffff",
+                position: "relative", zIndex: 1,
+                marginBottom: 20, letterSpacing: "-.01em",
+              }}>
                 We don't just deliver machines —<br />
-                <span style={{ color: "#f5a623" }}>
-                 we engineer the future of production.
-                </span>
+                <span style={{ color: "#f5a623" }}>we engineer the future of production.</span>
               </p>
 
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                position: "relative", zIndex: 1,
-              }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, position: "relative", zIndex: 1 }}>
                 <div style={{ width: 28, height: 1.5, background: "rgba(245,166,35,0.4)", borderRadius: 2 }} />
                 <span style={{
                   fontFamily: "'Barlow Condensed', sans-serif",
-                  fontSize: 11, fontWeight: 700,
-                  letterSpacing: ".22em", textTransform: "uppercase",
+                  fontSize: 11, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase",
                   color: "rgba(245,166,35,0.6)",
                 }}>
-                  Suntech Packaging · Est. 2003
+                  Suntech Packaging · Est. 2011
                 </span>
                 <div style={{ width: 28, height: 1.5, background: "rgba(245,166,35,0.4)", borderRadius: 2 }} />
               </div>
@@ -647,9 +1000,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            VISION & MISSION
-        ════════════════════════════════════════ */}
+        {/* ── VISION & MISSION ── */}
         <section style={{ padding: "0 24px 72px", background: "#ffffff" }}>
           <div style={{ maxWidth: 760, margin: "0 auto" }}>
 
@@ -668,33 +1019,17 @@ export default function About() {
               <span style={{ color: "#f5a623" }}>Everything We Build.</span>
             </h2>
 
-            {/* Vision + Mission stacked mobile, side-by-side tablet+ */}
-            <div
-              className="vm-grid reveal reveal-d2"
-              style={{ display: "flex", flexDirection: "column", gap: 20 }}
-            >
+            <div className="vm-grid reveal reveal-d2" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-              {/* ── VISION CARD ── */}
               <div className="vm-card vm-card-vision">
-                <div className="vm-icon-wrap">
-                  <span style={{ fontSize: 26 }}>🔭</span>
-                </div>
+                <div className="vm-icon-wrap"><span style={{ fontSize: 26 }}>🔭</span></div>
                 <div className="vm-badge">Vision</div>
-
-                <div className="vm-heading">
-                  India's Most Trusted<br />Packaging Partner
-                </div>
-
-                <div className="vm-tagline">
-                  "Building machines that build businesses — one shift at a time."
-                </div>
-
+                <div className="vm-heading">India's Most Trusted<br />Packaging Partner</div>
+                <div className="vm-tagline">"Building machines that build businesses — one shift at a time."</div>
                 <p className="vm-body">
                   To be the most reliable and innovative packaging machinery manufacturer in India —
-                  empowering manufacturers at every scale with technology that is precise,
-                  durable, and built for what comes next.
+                  empowering manufacturers at every scale with technology that is precise, durable, and built for what comes next.
                 </p>
-
                 <ul className="vm-points">
                   <li>Lead packaging automation across India and South Asia</li>
                   <li>Set the benchmark for after-sales service and machine uptime</li>
@@ -702,27 +1037,15 @@ export default function About() {
                 </ul>
               </div>
 
-              {/* ── MISSION CARD ── */}
               <div className="vm-card vm-card-mission">
-                <div className="vm-icon-wrap">
-                  <span style={{ fontSize: 26 }}>🎯</span>
-                </div>
+                <div className="vm-icon-wrap"><span style={{ fontSize: 26 }}>🎯</span></div>
                 <div className="vm-badge">Mission</div>
-
-                <div className="vm-heading">
-                  Precision Engineering,<br />Zero Compromise
-                </div>
-
-                <div className="vm-tagline">
-                  "Cost-effective. Low maintenance. Maximum output — every single shift."
-                </div>
-
+                <div className="vm-heading">Precision Engineering,<br />Zero Compromise</div>
+                <div className="vm-tagline">"Cost-effective. Low maintenance. Maximum output — every single shift."</div>
                 <p className="vm-body">
-                  To deliver industrial-grade packaging machinery that reduces downtime,
-                  lowers operational costs, and maximises production output — backed by
-                  continuous R&amp;D and a team that stays with you long after installation.
+                  To deliver industrial-grade packaging machinery that reduces downtime, lowers operational costs, and maximises
+                  production output — backed by continuous R&amp;D and a team that stays with you long after installation.
                 </p>
-
                 <ul className="vm-points">
                   <li>Engineer every machine to exceed international quality standards</li>
                   <li>Provide end-to-end support from installation to yearly maintenance</li>
@@ -757,28 +1080,19 @@ export default function About() {
                   <div style={{
                     width: 36, height: 36, borderRadius: 7, flexShrink: 0,
                     background: bg, border: `1.5px solid ${border}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 16,
-                  }}>
-                    {icon}
-                  </div>
+                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
+                  }}>{icon}</div>
                   <span style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: 13, fontWeight: 800,
-                    letterSpacing: ".06em", textTransform: "uppercase",
+                    fontSize: 13, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase",
                     color: "var(--blue-dark)",
-                  }}>
-                    {label}
-                  </span>
+                  }}>{label}</span>
                 </div>
               ))}
             </div>
 
           </div>
         </section>
-        {/* ════════════════════════════════════════
-            END VISION & MISSION
-        ════════════════════════════════════════ */}
 
         {/* ── STATS ── */}
         <section style={{ padding: "0 24px 72px", background: "var(--white)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
@@ -792,22 +1106,28 @@ export default function About() {
                 fontFamily: "'Barlow Condensed', sans-serif",
                 fontSize: 11, fontWeight: 700, letterSpacing: ".15em", textTransform: "uppercase",
               }}>
-                Since 2003
+                Since 2011
               </div>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
-              <StatCard value="20+"  label="Years Experience"    delay={0}   />
-              <StatCard value="50+" label="Machines Delivered"  delay={0.1} />
-              <StatCard value="100+" label="Clients"             delay={0.2} />
-              <StatCard value="12+"  label="Cities Served"       delay={0.3} />
+              <StatCard value="14+"  label="Years Experience"     delay={0}   />
+              <StatCard value="200+" label="Projects Completed"   delay={0.1} />
+              <StatCard value="9+"   label="Industries Served"    delay={0.2} />
+              <StatCard value="12+"  label="Cities Pan India"     delay={0.3} />
             </div>
           </div>
         </section>
 
+        {/* ── FOUNDER / CEO ── */}
+        <FounderSection />
+
+        {/* ── PAN INDIA PRESENCE ── */}
+        <PanIndiaSection />
+
         {/* ── CLIENTS ── */}
-        <section style={{ padding: "72px 24px", background: "#ffffff" }}>
-          <div style={{ maxWidth: 760, margin: "0 auto" }}>
+        <section style={{ padding: "0 24px 72px", background: "#ffffff", borderTop: "1px solid var(--border)" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", paddingTop: 56 }}>
 
             <div className="section-label reveal">Our Clients</div>
             <h2
@@ -827,10 +1147,7 @@ export default function About() {
             <div className="clients-grid reveal reveal-d2">
               {CLIENTS.map((c, i) => (
                 <div className="client-card" key={c.name}>
-                  <div
-                    className="client-icon"
-                    style={{ background: CLIENT_ICON_COLORS[i].bg, border: `1.5px solid ${CLIENT_ICON_COLORS[i].border}`, borderRadius: 8 }}
-                  >
+                  <div className="client-icon" style={{ background: CLIENT_ICON_COLORS[i].bg, border: `1.5px solid ${CLIENT_ICON_COLORS[i].border}`, borderRadius: 8 }}>
                     {c.icon}
                   </div>
                   <div>
@@ -878,30 +1195,10 @@ export default function About() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <WhyCard
-                icon="⚙️"
-                title="International Quality Standards"
-                desc="Every machine is engineered with precision-grade materials and validated against global manufacturing benchmarks."
-                delay={0}
-              />
-              <WhyCard
-                icon="⚡"
-                title="Smart Automation"
-                desc="Proprietary control systems and IoT-ready architecture bring modern intelligence to production lines."
-                delay={0.1}
-              />
-              <WhyCard
-                icon="🛡️"
-                title="End-to-End Support"
-                desc="From installation to maintenance, our dedicated service team ensures zero downtime and maximum output."
-                delay={0.2}
-              />
-              <WhyCard
-                icon="🌍"
-                title="Export-Grade Manufacturing"
-                desc="Designed for global deployment — compliant with CE, ISO, and regional standards across 12+ cities."
-                delay={0.3}
-              />
+              <WhyCard icon="⚙️" title="International Quality Standards" desc="Every machine is engineered with precision-grade materials and validated against global manufacturing benchmarks." delay={0} />
+              <WhyCard icon="⚡" title="Smart Automation" desc="Proprietary control systems and IoT-ready architecture bring modern intelligence to production lines." delay={0.1} />
+              <WhyCard icon="🛡️" title="End-to-End Support" desc="From installation to maintenance, our dedicated service team ensures zero downtime and maximum output." delay={0.2} />
+              <WhyCard icon="🌍" title="Export-Grade Manufacturing" desc="Designed for global deployment — compliant with CE, ISO, and regional standards across 12+ cities." delay={0.3} />
             </div>
           </div>
         </section>
@@ -926,29 +1223,23 @@ export default function About() {
             }} />
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "#f5a623" }} />
 
-            <div
-              className="reveal"
-              style={{
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontSize: "clamp(28px, 6vw, 44px)",
-                fontWeight: 900, lineHeight: 1.1,
-                color: "#fff", textTransform: "uppercase",
-                marginBottom: 16, position: "relative", zIndex: 1,
-              }}
-            >
+            <div className="reveal" style={{
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontSize: "clamp(28px, 6vw, 44px)",
+              fontWeight: 900, lineHeight: 1.1,
+              color: "#fff", textTransform: "uppercase",
+              marginBottom: 16, position: "relative", zIndex: 1,
+            }}>
               Ready to Scale<br />
               <span style={{ color: "#f5a623" }}>Your Production?</span>
             </div>
 
-            <p
-              className="reveal reveal-d1"
-              style={{
-                color: "rgba(192,215,245,0.65)",
-                fontSize: 15, marginBottom: 32,
-                lineHeight: 1.7, position: "relative", zIndex: 1,
-                fontWeight: 300,
-              }}
-            >
+            <p className="reveal reveal-d1" style={{
+              color: "rgba(192,215,245,0.65)",
+              fontSize: 15, marginBottom: 32,
+              lineHeight: 1.7, position: "relative", zIndex: 1,
+              fontWeight: 300,
+            }}>
               Talk to our engineering team and discover the right solution for your line.
             </p>
 

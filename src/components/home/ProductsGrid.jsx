@@ -2,12 +2,12 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const products = [
-  { name: "Atta Packaging Machine", img: `${import.meta.env.BASE_URL}products/Packaging Machine.png`, tag: "Powder & Flour", num: "01", spec: "5–50 kg/bag" },
-  { name: "Granules Packaging Machine", img: `${import.meta.env.BASE_URL}products/Packing Machine.png`, tag: "Granules", num: "02", spec: "100g–25 kg" },
-  { name: "Flow Wrapping Machine", img: `${import.meta.env.BASE_URL}products/Wrapping Machine.png`, tag: "Wrapping", num: "03", spec: "Up to 120 ppm" },
-  { name: "Masala Packaging Machine", img: `${import.meta.env.BASE_URL}products/Powder Packaging Machine.png`, tag: "Spices & Powder", num: "04", spec: "10g–1 kg" },
-  { name: "Sealing Machine", img: `${import.meta.env.BASE_URL}products/Sealing Machine.png`, tag: "Sealing", num: "05", spec: "Continuous / Impulse" },
-  { name: "Vacuum Packaging Machine", img: `${import.meta.env.BASE_URL}products/Vacuum Packaging Machine.png`, tag: "Vacuum", num: "06", spec: "99.9% Vacuum" },
+  { name: "Atta Packaging Machine", img: `${import.meta.env.BASE_URL}products/Packaging_Machine__2_.png`, tag: "Powder & Flour", num: "01", spec: "5–50 kg/bag" },
+  { name: "Granules Packaging Machine", img: `${import.meta.env.BASE_URL}products/Packing_Machine.png`, tag: "Granules", num: "02", spec: "100g–25 kg" },
+  { name: "Flow Wrapping Machine", img: `${import.meta.env.BASE_URL}products/Wrapping_Machine.png`, tag: "Wrapping", num: "03", spec: "Up to 120 ppm" },
+  { name: "Masala Packaging Machine", img: `${import.meta.env.BASE_URL}products/Powder_Packaging_Machine.png`, tag: "Spices & Powder", num: "04", spec: "10g–1 kg" },
+  { name: "Sealing Machine", img: `${import.meta.env.BASE_URL}products/Sealing_Machine__2_.png`, tag: "Sealing", num: "05", spec: "Continuous / Impulse" },
+  { name: "Vacuum Packaging Machine", img: `${import.meta.env.BASE_URL}products/Vacuum_Packaging_Machine.png`, tag: "Vacuum", num: "06", spec: "99.9% Vacuum" },
 ];
 
 export default function ProductsGrid() {

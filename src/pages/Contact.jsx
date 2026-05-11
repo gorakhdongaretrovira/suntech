@@ -523,7 +523,7 @@ export default function Contact() {
               <div className="ct-info-body">
                 <div className="ct-info-row">
                   <span className="ct-info-label">Phone</span>
-                  <a href="tel:+919876543210" className="ct-info-value">+91 98765 43210</a>
+                  <a href="tel:+918975091999" className="ct-info-value">+91 89750 91999</a>
                 </div>
                 <div className="ct-info-row">
                   <span className="ct-info-label">Email</span>
@@ -538,7 +538,7 @@ export default function Contact() {
                   <span className="ct-info-value">Mon &ndash; Sat &middot; 9 AM &ndash; 7 PM</span>
                 </div>
 
-                <a href="tel:+919876543210" className="ct-wa-btn">
+                <a href="tel:+918975091999" className="ct-wa-btn">
                   <span className="ct-wa-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#0e1c2f" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                       <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.23 11.72 11.72 0 003.7.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 6a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.7 1 1 0 01-.23 1.11l-2.24 2.24z" />
@@ -605,7 +605,7 @@ export default function Contact() {
                       value={form.phone}
                       onChange={handleChange("phone")}
                       className="ct-input"
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 89750 91999"
                     />
                   </div>
 
