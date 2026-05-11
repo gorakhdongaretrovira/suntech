@@ -19,47 +19,53 @@ import FAQ from "./pages/FAQ";
 import WhatsAppButton from "./components/common/WhatsAppButton";
 
 const Services = () => (
-  <div className="text-white text-3xl text-center mt-20">Services Page</div>
+  <div className="text-white text-3xl text-center mt-20">
+    Services Page
+  </div>
 );
 
 const NotFound = () => (
-  <div className="text-white text-3xl text-center mt-20">404 – Page Not Found</div>
+  <div className="text-white text-3xl text-center mt-20">
+    404 – Page Not Found
+  </div>
 );
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
-    <>
+    <div className="bg-[#111827] min-h-screen flex flex-col">
       {loading && <Loader onFinish={() => setLoading(false)} />}
 
       {!loading && (
-        <div className="bg-[#111827] min-h-screen flex flex-col">
+        <>
           <Navbar />
 
-          <div className="pt-20 flex-1">
+          <main className="pt-20 flex-1">
             <Routes>
-              <Route path="/"               element={<Home />} />
-              <Route path="/about"          element={<About />} />
-              <Route path="/services"       element={<Services />} />
-              <Route path="/solutions"      element={<Solutions />} />
-              <Route path="/media"          element={<Media />} />
-              <Route path="/media/videos"   element={<Video />} />
-              <Route path="/contact"        element={<Contact />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/solutions" element={<Solutions />} />
+              <Route path="/media" element={<Media />} />
+              <Route path="/media/videos" element={<Video />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/machines/:type" element={<MachinePage />} />
-              <Route path="/product/:name"  element={<ProductDetail />} />
-              <Route path="/applications"   element={<Applications />} />
-              <Route path="/projects"       element={<Projects />} />
-              <Route path="/brochure"       element={<Brochure />} />
-              <Route path="/faq"            element={<FAQ />} />
-              <Route path="*"               element={<NotFound />} />
+              <Route path="/product/:name" element={<ProductDetail />} />
+              <Route path="/applications" element={<Applications />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/brochure" element={<Brochure />} />
+              <Route path="/faq" element={<FAQ />} />
+
+              {/* 404 Route */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
-          </div>
+          </main>
 
           <Footer />
           <WhatsAppButton />
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
