@@ -654,8 +654,8 @@ export default function Applications() {
               ))}
             </div>
           </div>
-        </section>
-
+        </section>                                      
+        
         {/* Content */}
         <div className="app-content">
 

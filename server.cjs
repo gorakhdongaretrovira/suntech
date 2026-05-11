@@ -1,3 +1,7 @@
+console.log("ENV email loaded", process.env.EMAIL ? "✓" : "✗");
+console.log("ENV password loaded", process.env.PASSWORD ? "✓" : "✗");
+console.log("Password length:", (process.env.PASSWORD || "").length);
+
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -10,7 +14,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ── Helper: load logo as base64 data URI (works without any hosting) ──────────
 function getLogoBase64() {
   try {
     // Adjust this path to wherever your logo.jpeg lives relative to server.js
@@ -22,6 +25,24 @@ function getLogoBase64() {
     return "";
   }
 }
+
+// Ensure environment variables are loaded
+const emailUser = (process.env.EMAIL || "").trim();
+const emailPass = (process.env.PASSWORD || "").trim().replace(/^["']|["']$/g, "");
+
+if (!emailUser || !emailPass) {
+  console.error("ERROR: EMAIL or PASSWORD not configured in .env file");
+}
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.hostinger.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: emailUser,
+    pass: emailPass,
+  },
+});
 
 app.post("/api/contact", async (req, res) => {
   const { name, email, phone, message } = req.body;
@@ -35,17 +56,9 @@ app.post("/api/contact", async (req, res) => {
   const logoSrc = getLogoBase64();
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
-      },
-    });
-
     await transporter.sendMail({
-      from: `"SunTech Packaging" <${process.env.EMAIL}>`,
-      to: process.env.EMAIL,
+      from: `"SunTech Packaging" <${emailUser}>`,
+      to: emailUser,
       subject: `🔔 New Lead: ${name} — SunTech Contact Form`,
       html: `
 <!DOCTYPE html>
@@ -454,7 +467,16 @@ app.post("/api/contact", async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    const errorMsg = error?.message || String(error);
+    const errorStack = error?.stack || "";
+    console.error("Email sending failed:", errorMsg);
+    if (errorStack) console.error(errorStack);
+    
+    fs.appendFileSync(
+      "email-error.log",
+      `${new Date().toISOString()} ERROR: ${errorMsg}\n`
+    );
+    
     res.status(500).json({
       success: false,
       message: "Email failed",
@@ -464,4 +486,13 @@ app.post("/api/contact", async (req, res) => {
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
+  transporter.verify((error, success) => {
+    if (error) {
+      console.log('SMTP verification failed:', error);
+    } else {
+      console.log('SMTP server is ready to take messages');
+    }
+  });
 });
+
+process.stdin.resume();

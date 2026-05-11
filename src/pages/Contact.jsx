@@ -463,7 +463,7 @@ export default function Contact() {
       setToast("Message sent successfully! Download will begin shortly.");
 
       const link = document.createElement("a");
-      link.href = "/suntech_brochure.pdf";
+      link.href = `${import.meta.env.BASE_URL}suntech_brochure.pdf`;
       link.download = "SunTech-Brochure.pdf";
       document.body.appendChild(link);
       link.click();

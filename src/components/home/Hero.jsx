@@ -533,7 +533,7 @@ export default function Hero() {
       {/* MAP */}
 
       <div className="hw-map">
-
+       
         <MapContainer
           center={mapCenter}
           zoom={mapZoom}

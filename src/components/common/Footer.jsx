@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const TICKER_ITEMS = [
@@ -31,6 +32,16 @@ const SERVICE_LINKS = [
 ];
 
 export default function Footer() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v) {
+      v.muted = true;
+      v.play().catch(() => {});
+    }
+  }, []);
+
   return (
     <>
       <style>{`
@@ -129,33 +140,82 @@ export default function Footer() {
           }
         }
 
-        /* ── LOGO — same rectangular style, inverted for dark bg ── */
+        /* ══════════════════════════════════════════
+           FOOTER VIDEO LOGO  —  mobile-first
+        ══════════════════════════════════════════ */
         .ft-logo {
           display: inline-flex; align-items: center;
           text-decoration: none; width: fit-content;
         }
+
         .ft-logo-box {
-          display: flex; align-items: center; justify-content: center;
-          height: 56px;
-          padding: 6px 14px;
-          /* white box so logo is always visible on dark footer */
-          background: #ffffff;
-          border: 2px solid rgba(255,255,255,0.15);
-          border-radius: 8px;
-          box-shadow: 3px 3px 0px var(--ft-orange);
-          transition: box-shadow 0.2s, transform 0.2s;
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          /* mobile size */
+          height: 52px;
+          padding: 0;
           overflow: hidden;
+          border-radius: 10px;
+
+          /* dark-bg glass look */
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(245,166,35,0.22);
+
+          box-shadow:
+            0 0 0 0 rgba(245,166,35,0),
+            3px 3px 0px var(--ft-orange),
+            0 6px 24px rgba(0,0,0,0.45);
+
+          transition:
+            transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+            box-shadow 0.25s ease,
+            background 0.25s ease;
         }
+
         .ft-logo-box:hover {
-          box-shadow: 5px 5px 0px var(--ft-orange);
-          transform: translate(-1px, -1px);
+          transform: translate(-2px, -2px);
+          background: rgba(245,166,35,0.06);
+          box-shadow:
+            0 0 0 1px rgba(245,166,35,0.35),
+            5px 5px 0px var(--ft-orange),
+            0 10px 36px rgba(245,166,35,0.15);
         }
-        .ft-logo-box img {
-          height: 44px;
-          width: auto;
-          max-width: 180px;
-          object-fit: contain;
+
+        /* glow overlay on hover */
+        .ft-logo-box::after {
+          content: '';
+          position: absolute; inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(ellipse at 50% 50%, rgba(245,166,35,0.10) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s;
+          pointer-events: none;
+        }
+        .ft-logo-box:hover::after { opacity: 1; }
+
+        /* VIDEO */
+        .ft-logo-video {
           display: block;
+          height: 52px;
+          width: auto;
+          max-width: 200px;
+          object-fit: contain;
+          border-radius: inherit;
+        }
+
+        /* Desktop */
+        @media (min-width: 768px) {
+          .ft-logo-box {
+            height: 62px;
+            border-radius: 12px;
+          }
+          .ft-logo-video {
+            height: 62px;
+            max-width: 240px;
+          }
         }
 
         .ft-desc {
@@ -349,14 +409,22 @@ export default function Footer() {
             <div className="ft-brand">
 
               <div style={{ display: "flex", flexDirection: "column", maxWidth: 340 }}>
-                {/* LOGO — white rectangular box with orange shadow on dark footer */}
+
+                {/* ── VIDEO LOGO ── */}
                 <Link to="/" className="ft-logo">
                   <div className="ft-logo-box">
-                    <img
-                      src="/logo.jpeg"
-                      alt="SunTech Packaging Machines"
-                      loading="lazy"
-                      draggable="false"
+                    <video
+                      ref={videoRef}
+                      className="ft-logo-video"
+                      src={`${import.meta.env.BASE_URL}videos/SUNTECH_logo3d.mp4`}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      aria-label="SunTech Packaging Machines"
                     />
                   </div>
                 </Link>

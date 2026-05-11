@@ -31,11 +31,11 @@ const css = `
     transition: background 0.35s, box-shadow 0.35s;
   }
   .nb.scrolled {
-    background: rgba(8, 12, 22, 0.88);
-    box-shadow: 0 4px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+    background: rgba(8, 12, 22, 0.92);
+    box-shadow: 0 4px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07);
   }
 
-  /* subtle animated gradient line at top */
+  /* animated gradient line at top */
   .nb::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0;
@@ -46,59 +46,99 @@ const css = `
     opacity: 0.8;
   }
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
   }
 
   .nb-inner {
     max-width: 1400px; margin: 0 auto;
     display: flex; align-items: center;
-    height: 64px; padding: 0 16px;
-    gap: 12px;
+    height: 60px; padding: 0 14px;
+    gap: 10px;
   }
   @media (min-width: 960px) {
-    .nb-inner { height: 68px; padding: 0 28px; gap: 20px; }
+    .nb-inner { height: 72px; padding: 0 28px; gap: 20px; }
   }
 
-  /* ── LOGO ── */
+  /* ══════════════════════════════════════════
+     LOGO VIDEO BOX  —  mobile-first
+  ══════════════════════════════════════════ */
   .nb-logo {
     display: flex; align-items: center;
     text-decoration: none; flex-shrink: 0;
+    /* push CTA / hamburger to right */
+    margin-right: auto;
   }
 
-  /* Tight-fit logo box — glassmorphic pill */
   .nb-logo-box {
-    display: inline-flex; align-items: center; justify-content: center;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* mobile size */
     height: 44px;
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.94);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 10px;
-    box-shadow:
-      0 2px 12px rgba(0,0,0,0.25),
-      0 1px 3px rgba(0,0,0,0.15),
-      inset 0 1px 0 rgba(255,255,255,0.9);
-    transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+    /* width auto via aspect ratio of video */
+    padding: 0;
     overflow: hidden;
-  }
-  .nb-logo-box:hover {
-    background: rgba(255,255,255,1);
+    border-radius: 10px;
+    background: transparent;
+
+    /* subtle glass ring */
     box-shadow:
-      0 4px 20px rgba(0,0,0,0.3),
-      0 2px 6px rgba(0,0,0,0.2),
-      inset 0 1px 0 rgba(255,255,255,0.95);
-    transform: translateY(-1px);
+      0 0 0 1px rgba(245,166,35,0.18),
+      0 4px 18px rgba(0,0,0,0.35),
+      0 1px 0 rgba(255,255,255,0.06) inset;
+
+    transition:
+      transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+      box-shadow 0.25s ease;
   }
-  .nb-logo-box img {
-    height: 36px;
-    width: auto;
-    max-width: 140px;
-    object-fit: contain;
+
+  .nb-logo-box:hover {
+    transform: translateY(-2px) scale(1.025);
+    box-shadow:
+      0 0 0 1.5px rgba(245,166,35,0.45),
+      0 8px 32px rgba(245,166,35,0.18),
+      0 2px 8px rgba(0,0,0,0.4),
+      0 1px 0 rgba(255,255,255,0.10) inset;
+  }
+
+  /* glow pulse on hover */
+  .nb-logo-box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 50% 50%, rgba(245,166,35,0.12) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .nb-logo-box:hover::after { opacity: 1; }
+
+  /* VIDEO element */
+  .nb-logo-video {
     display: block;
+    /* mobile: fit within 44px tall box */
+    height: 44px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    border-radius: inherit;
+    /* crisp playback */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
+
+  /* Desktop overrides */
   @media (min-width: 960px) {
-    .nb-logo-box { height: 46px; padding: 4px 12px; }
-    .nb-logo-box img { height: 38px; max-width: 160px; }
+    .nb-logo-box {
+      height: 56px;
+      border-radius: 13px;
+    }
+    .nb-logo-video {
+      height: 56px;
+      max-width: 260px;
+    }
   }
 
   /* ── DESKTOP NAV LINKS ── */
@@ -126,9 +166,7 @@ const css = `
     color: #ffffff;
     background: rgba(255,255,255,0.08);
   }
-  .nb-link.active {
-    color: #ffffff; font-weight: 600;
-  }
+  .nb-link.active { color: #ffffff; font-weight: 600; }
   .nb-link.active::after {
     content: '';
     position: absolute; bottom: 5px; left: 50%;
@@ -216,10 +254,7 @@ const css = `
     background: rgba(255,255,255,0.2); flex-shrink: 0;
     transition: background 0.2s;
   }
-  .nb-dd-item:hover {
-    color: #ffffff;
-    background: rgba(255,255,255,0.07);
-  }
+  .nb-dd-item:hover { color: #ffffff; background: rgba(255,255,255,0.07); }
   .nb-dd-item:hover::before { background: #f5a623; }
 
   /* ── CTA BUTTON ── */
@@ -236,8 +271,7 @@ const css = `
     box-shadow: 0 4px 20px rgba(245,166,35,0.35), 0 0 0 1px rgba(245,166,35,0.2);
   }
   .nb-cta:hover {
-    opacity: 0.92;
-    transform: translateY(-1px);
+    opacity: 0.92; transform: translateY(-1px);
     box-shadow: 0 6px 28px rgba(245,166,35,0.45), 0 0 0 1px rgba(245,166,35,0.3);
   }
   @media (min-width: 960px) { .nb-cta { display: flex; align-items: center; } }
@@ -249,7 +283,7 @@ const css = `
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.12);
     cursor: pointer; padding: 10px; border-radius: 8px;
-    margin-left: auto; flex-shrink: 0;
+    flex-shrink: 0;
     transition: background 0.2s, border-color 0.2s;
   }
   .nb-ham:hover {
@@ -284,7 +318,7 @@ const css = `
 
   /* ── MOBILE DRAWER ── */
   .nb-drawer {
-    position: fixed; top: 64px; left: 0; right: 0; z-index: 99;
+    position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
     background: rgba(8, 13, 28, 0.97);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -292,7 +326,10 @@ const css = `
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     transform: translateY(-6px); opacity: 0; pointer-events: none;
     transition: transform 0.3s ease, opacity 0.25s;
-    max-height: calc(100svh - 64px); overflow-y: auto;
+    max-height: calc(100svh - 60px); overflow-y: auto;
+  }
+  @media (min-width: 960px) {
+    .nb-drawer { top: 72px; max-height: calc(100svh - 72px); }
   }
   .nb-drawer.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
@@ -408,6 +445,7 @@ export default function Navbar() {
   const app   = useHoverDropdown();
   const media = useHoverDropdown();
 
+  const videoRef = useRef(null);
   const { pathname } = useLocation();
   const navigate     = useNavigate();
 
@@ -421,6 +459,15 @@ export default function Navbar() {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  /* ensure video plays even after re-mount */
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v) {
+      v.muted = true;
+      v.play().catch(() => {});
+    }
+  }, []);
 
   const closeAll = () => {
     setMenuOpen(false);
@@ -442,23 +489,29 @@ export default function Navbar() {
       <header className={`nb${scrolled ? " scrolled" : ""}`}>
         <div className="nb-inner">
 
-          {/* LOGO — only change: /suntech/logo.jpeg */}
+          {/* ── LOGO (video) ── */}
           <Link to="/" className="nb-logo" onClick={closeAll}>
             <div className="nb-logo-box">
-              <img
-                src="/suntech/logo.jpeg"
-                alt="SunTech Packaging Machines"
-                loading="eager"
-                draggable="false"
+              <video
+                ref={videoRef}
+                className="nb-logo-video"
+                src={`${import.meta.env.BASE_URL}videos/SUNTECH_logo3d.mp4`}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                disablePictureInPicture
+                disableRemotePlayback
+                aria-label="SunTech Packaging Machines"
               />
             </div>
           </Link>
 
           {/* DESKTOP LINKS */}
           <nav className="nb-links">
-
-            <Link to="/" className={`nb-link${pathname === "/" ? " active" : ""}`} onClick={closeAll}>Home</Link>
-            <Link to="/about" className={`nb-link${pathname === "/about" ? " active" : ""}`} onClick={closeAll}>About</Link>
+            <Link to="/"         className={`nb-link${pathname === "/"         ? " active" : ""}`} onClick={closeAll}>Home</Link>
+            <Link to="/about"    className={`nb-link${pathname === "/about"    ? " active" : ""}`} onClick={closeAll}>About</Link>
 
             {/* Applications */}
             <div className="nb-dd-wrap" onMouseEnter={app.handleMouseEnter} onMouseLeave={app.handleMouseLeave}>
@@ -483,9 +536,7 @@ export default function Navbar() {
               <div className={`nb-dropdown${media.open ? " open" : ""}`}
                 onMouseEnter={media.handleMouseEnter} onMouseLeave={media.handleMouseLeave}>
                 {MEDIA_ITEMS.map(item => (
-                  <Link key={item.to} to={item.to} className="nb-dd-item" onClick={closeAll}>
-                    {item.label}
-                  </Link>
+                  <Link key={item.to} to={item.to} className="nb-dd-item" onClick={closeAll}>{item.label}</Link>
                 ))}
               </div>
             </div>
@@ -498,9 +549,7 @@ export default function Navbar() {
               <div className={`nb-dropdown${mach.open ? " open" : ""}`}
                 onMouseEnter={mach.handleMouseEnter} onMouseLeave={mach.handleMouseLeave}>
                 {MACHINES.map(m => (
-                  <Link key={m.to} to={m.to} className="nb-dd-item" onClick={closeAll}>
-                    {m.label}
-                  </Link>
+                  <Link key={m.to} to={m.to} className="nb-dd-item" onClick={closeAll}>{m.label}</Link>
                 ))}
               </div>
             </div>
@@ -510,7 +559,6 @@ export default function Navbar() {
             <Link to="/faq"       className={`nb-link${pathname === "/faq"       ? " active" : ""}`} onClick={closeAll}>FAQ</Link>
             <Link to="/solutions" className={`nb-link${pathname === "/solutions" ? " active" : ""}`} onClick={closeAll}>Solutions</Link>
             <Link to="/contact"   className={`nb-link${pathname === "/contact"   ? " active" : ""}`} onClick={closeAll}>Contact</Link>
-
           </nav>
 
           {/* CTA */}
@@ -521,7 +569,6 @@ export default function Navbar() {
             onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
             <span /><span /><span />
           </button>
-
         </div>
       </header>
 
@@ -529,7 +576,7 @@ export default function Navbar() {
       <div className={`nb-drawer${menuOpen ? " open" : ""}`}>
         <nav className="nb-mob-nav">
 
-          <Link to="/" className={`nb-mob-link${pathname === "/" ? " active" : ""}`} onClick={closeAll}>Home</Link>
+          <Link to="/"      className={`nb-mob-link${pathname === "/"      ? " active" : ""}`} onClick={closeAll}>Home</Link>
           <Link to="/about" className={`nb-mob-link${pathname === "/about" ? " active" : ""}`} onClick={closeAll}>About</Link>
 
           <div className="nb-mob-sep" />
@@ -541,9 +588,7 @@ export default function Navbar() {
           </button>
           <div className={`nb-mob-sub${mobAppOpen ? " open" : ""}`}>
             {APPLICATION_TYPES.map(type => (
-              <button key={type} className="nb-mob-sub-item" onClick={() => handleAppNav(type)}>
-                {type}
-              </button>
+              <button key={type} className="nb-mob-sub-item" onClick={() => handleAppNav(type)}>{type}</button>
             ))}
           </div>
 
@@ -554,9 +599,7 @@ export default function Navbar() {
           </button>
           <div className={`nb-mob-sub${mobMediaOpen ? " open" : ""}`}>
             {MEDIA_ITEMS.map(item => (
-              <Link key={item.to} to={item.to} className="nb-mob-sub-item" onClick={closeAll}>
-                {item.label}
-              </Link>
+              <Link key={item.to} to={item.to} className="nb-mob-sub-item" onClick={closeAll}>{item.label}</Link>
             ))}
           </div>
 
@@ -567,9 +610,7 @@ export default function Navbar() {
           </button>
           <div className={`nb-mob-sub${mobMachOpen ? " open" : ""}`}>
             {MACHINES.map(m => (
-              <Link key={m.to} to={m.to} className="nb-mob-sub-item" onClick={closeAll}>
-                {m.label}
-              </Link>
+              <Link key={m.to} to={m.to} className="nb-mob-sub-item" onClick={closeAll}>{m.label}</Link>
             ))}
           </div>
 

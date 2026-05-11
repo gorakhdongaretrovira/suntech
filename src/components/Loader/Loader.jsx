@@ -502,7 +502,7 @@ export default function Loader({ onFinish }) {
             <div className="ld-box">
               <img
                 className="ld-logo"
-                src="/logo.png"
+                src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="SunTech"
                 draggable={false}
               />
