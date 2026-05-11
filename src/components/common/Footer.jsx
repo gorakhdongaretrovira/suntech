@@ -2,8 +2,8 @@ import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const TICKER_ITEMS = [
-  "ISO 9001 Certified","Made in India","500+ Installations",
-  "40+ Cities","Custom Engineering","After-Sales Support",
+  "ISO 9001 Certified","Made in India","50+ Installations",
+  "12+ Cities","Custom Engineering","After-Sales Support",
   "PLC Controlled","Stainless Steel Build","1-Year Warranty",
 ];
 

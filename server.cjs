@@ -330,7 +330,7 @@ app.post("/api/contact", async (req, res) => {
             <tr>
               <td align="center" style="padding:0 8px;">
                 <span style="display:block;font-size:22px;font-weight:900;
-                              color:#f5a623;line-height:1;">500+</span>
+                              color:#f5a623;line-height:1;">50+</span>
                 <span style="font-size:9px;font-weight:700;letter-spacing:0.18em;
                               text-transform:uppercase;color:#9ca3af;
                               margin-top:4px;display:block;">Installs</span>

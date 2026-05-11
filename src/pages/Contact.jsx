@@ -498,7 +498,7 @@ export default function Contact() {
                 Tell us your packaging requirements — we engineer machines to match every production demand.
               </p>
               <div className="ct-hero-stats">
-                <div className="ct-stat"><strong>500+</strong> machines delivered</div>
+                <div className="ct-stat"><strong>50+</strong> machines delivered</div>
                 <div className="ct-stat"><strong>24hr</strong> response time</div>
                 <div className="ct-stat"><strong>Pan India</strong> service</div>
               </div>

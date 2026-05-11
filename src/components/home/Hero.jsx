@@ -211,15 +211,10 @@ function PopupCard({ city }) {
   return (
     <div
       style={{
-        fontFamily:
-          "'Segoe UI',system-ui,sans-serif",
-
+        fontFamily: "'Segoe UI',system-ui,sans-serif",
         minWidth: 170,
-
         padding: "11px 13px 10px",
-
         background: WHITE,
-
         borderRadius: 10,
       }}
     >
@@ -261,13 +256,7 @@ function PopupCard({ city }) {
         )}
       </div>
 
-      <div
-        style={{
-          fontSize: 9,
-          color: "#888",
-          marginBottom: 7,
-        }}
-      >
+      <div style={{ fontSize: 9, color: "#888", marginBottom: 7 }}>
         Partner since {city.since}
       </div>
 
@@ -290,13 +279,7 @@ function PopupCard({ city }) {
           {city.installs}
         </span>
 
-        <span
-          style={{
-            fontSize: 10,
-            color: "#666",
-            fontWeight: 600,
-          }}
-        >
+        <span style={{ fontSize: 10, color: "#666", fontWeight: 600 }}>
           Installations
         </span>
       </div>
@@ -315,11 +298,7 @@ function PopupCard({ city }) {
             height: "100%",
             borderRadius: 2,
             width: `${pct}%`,
-            background: `linear-gradient(
-              90deg,
-              ${ORANGE},
-              #ffb347
-            )`,
+            background: `linear-gradient(90deg, ${ORANGE}, #ffb347)`,
           }}
         />
       </div>
@@ -369,7 +348,6 @@ function PopupCard({ city }) {
                 display: "inline-block",
               }}
             />
-
             {m}
           </li>
         ))}
@@ -377,76 +355,150 @@ function PopupCard({ city }) {
     </div>
   );
 }
+
 /* ==========================================================================
    HERO.JSX — FULL FINAL VERSION
    PART 2
 ========================================================================== */
 
 /* ==========================================================================
+   FIX #1 — MAP VIEW CONTROLLER
+   MapContainer only reads `center` and `zoom` on first mount — prop changes
+   are silently ignored. This component calls map.setView() whenever screenW
+   changes, so mobile framing is actually applied after render.
+
+   Mobile target: all 5 Maharashtra cities must be visible.
+     Northernmost: Nagpur  21.15 N, 79.09 E
+     Southernmost: Pune    18.52 N, 73.86 E
+     Westernmost:  Mumbai  19.08 N, 72.88 E
+   Centroid of bounding box ≈ 19.85 N, 76.0 E
+   We nudge center slightly north (20.2) so southern cities
+   (Pune / Mumbai) clear the bottom text panel.
+========================================================================== */
+
+function MapViewController({ screenW }) {
+  const map = useMap();
+
+  useEffect(() => {
+    let center, zoom;
+
+    if (screenW < 480) {
+      // small phones: pull back enough to show Nagpur–Pune vertically
+      center = [20.2, 76.8];
+      zoom   = 5.8;
+    } else if (screenW < 768) {
+      // large phones / small tablets
+      center = [20.0, 76.5];
+      zoom   = 6.2;
+    } else {
+      // desktop — UNCHANGED from original
+      center = [19.8, 76.2];
+      zoom   = 6.8;
+    }
+
+    map.setView(center, zoom, { animate: false });
+  }, [screenW, map]);
+
+  return null;
+}
+
+/* ==========================================================================
    SMART MARKER
+   FIX #2 — Mobile touch support
+
+   Root causes:
+   1. MapContainer `center`/`zoom` props are mount-only so the JS fix above
+      (MapViewController) is necessary for map framing.
+   2. .hw-text at z-index:10 with pointer-events covering the map area was
+      swallowing taps. Fixed by setting pointer-events:none on .hw-text and
+      restoring it only on interactive children.
+   3. Leaflet internally marks marker panes pointer-events:none in some
+      versions; we override via CSS.
+   4. touchstart fires before Leaflet's own synthetic click so we use it to
+      open the popup immediately without delay, passing { passive: true } so
+      the browser's scroll handling isn't disrupted.
 ========================================================================== */
 
 function SmartMarker({ city, screenW }) {
-  const map = useMap();
-
-  const markerRef = useRef(null);
-
+  const map        = useMap();
+  const markerRef  = useRef(null);
   const hoverTimer = useRef(null);
+  const isMobile   = screenW < 768;
+  const icon       = buildMarkerIcon(city, screenW);
 
-  const isMobile = screenW < 768;
-
-  const icon = buildMarkerIcon(city, screenW);
-
-  const openPopup = () =>
-    markerRef.current?.openPopup();
-
-  const closePopup = () =>
-    markerRef.current?.closePopup();
+  const openPopup  = () => markerRef.current?.openPopup();
+  const closePopup = () => markerRef.current?.closePopup();
 
   useEffect(() => {
     const marker = markerRef.current;
-
     if (!marker) return;
 
+    const toggle = () => {
+      if (markerRef.current?.isPopupOpen()) {
+        closePopup();
+      } else {
+        openPopup();
+      }
+    };
+
+    /* ---- DESKTOP: hover open / hover close ---- */
     const onOver = () => {
       clearTimeout(hoverTimer.current);
       openPopup();
     };
-
     const onOut = () => {
-      hoverTimer.current = setTimeout(
-        closePopup,
-        220
-      );
-    };
-
-    const onClick = () => {
-      markerRef.current?.isPopupOpen()
-        ? closePopup()
-        : openPopup();
+      hoverTimer.current = setTimeout(closePopup, 220);
     };
 
     if (!isMobile) {
       marker.on("mouseover", onOver);
-      marker.on("mouseout", onOut);
+      marker.on("mouseout",  onOut);
     }
 
-    marker.on("click", onClick);
+    /* Leaflet 'click' fires on desktop click AND mobile touchend */
+    marker.on("click", toggle);
+
+    /*
+      Direct DOM touchstart on the marker element:
+      - { passive: true } keeps scroll behaviour intact
+      - stopPropagation stops the map's own touch-drag handler
+        from swallowing the event before the popup can open
+    */
+    const el = marker.getElement?.();
+    if (el) {
+      /* ensure the SVG div is always hittable */
+      el.style.pointerEvents = "auto";
+      el.style.cursor        = "pointer";
+      el.style.touchAction   = "manipulation"; /* removes 300 ms tap delay */
+
+      const onTouchStart = (e) => {
+        e.stopPropagation();
+        toggle();
+      };
+
+      el.addEventListener("touchstart", onTouchStart, { passive: true });
+
+      return () => {
+        clearTimeout(hoverTimer.current);
+        marker.off("mouseover", onOver);
+        marker.off("mouseout",  onOut);
+        marker.off("click",     toggle);
+        el.removeEventListener("touchstart", onTouchStart);
+      };
+    }
 
     return () => {
       clearTimeout(hoverTimer.current);
-
       marker.off("mouseover", onOver);
-      marker.off("mouseout", onOut);
-      marker.off("click", onClick);
+      marker.off("mouseout",  onOut);
+      marker.off("click",     toggle);
     };
   }, [isMobile]);
 
+  /* close popup when tapping empty map area */
   useEffect(() => {
     const fn = () => closePopup();
-
     map.on("click", fn);
-
     return () => map.off("click", fn);
   }, [map]);
 
@@ -479,14 +531,8 @@ function MapResizer() {
 
   useEffect(() => {
     const fn = () => map.invalidateSize();
-
     window.addEventListener("resize", fn);
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        fn
-      );
+    return () => window.removeEventListener("resize", fn);
   }, [map]);
 
   return null;
@@ -497,56 +543,40 @@ function MapResizer() {
 ========================================================================== */
 
 export default function Hero() {
-  const [screenW, setScreenW] =
-    useState(window.innerWidth);
+  const [screenW, setScreenW] = useState(window.innerWidth);
 
   useEffect(() => {
-    const onResize = () =>
-      setScreenW(window.innerWidth);
-
-    window.addEventListener(
-      "resize",
-      onResize
-    );
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        onResize
-      );
+    const onResize = () => setScreenW(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  /* MOBILE MAP FIX */
-  const mapCenter =
-    screenW < 400
-      ? [20.1, 75.8]
-      : screenW < 600
-      ? [20.0, 75.9]
-      : [19.8, 76.2];
-
-  const mapZoom =
-    screenW < 480 ? 6.4 : 6.8;
+  /*
+    These are the initial mount-time values.
+    MapViewController overrides them immediately via map.setView()
+    so the correct responsive framing is always applied.
+    Desktop values are preserved here as the baseline.
+  */
+  const initialCenter = [19.8, 76.2];
+  const initialZoom   = 6.8;
 
   return (
     <section className="hw">
 
       {/* MAP */}
-
       <div className="hw-map">
-       
         <MapContainer
-          center={mapCenter}
-          zoom={mapZoom}
+          center={initialCenter}
+          zoom={initialZoom}
           zoomControl={false}
           attributionControl={false}
           scrollWheelZoom={false}
           dragging={true}
           doubleClickZoom={false}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
+          style={{ width: "100%", height: "100%" }}
         >
+          {/* FIX #1: reactive re-centering whenever screenW changes */}
+          <MapViewController screenW={screenW} />
           <MapResizer />
 
           <TileLayer
@@ -564,37 +594,24 @@ export default function Hero() {
         </MapContainer>
       </div>
 
-      {/* OVERLAYS */}
-
+      {/* OVERLAYS — pointer-events:none so they never block map taps */}
       <div className="hw-veil-l" />
-
       <div className="hw-dots" />
 
       {/* CONTENT */}
-
       <div className="hw-text">
 
         <div className="hw-badge">
           ● INDUSTRIAL PACKAGING SOLUTIONS
         </div>
 
-        {/* FIXED H1 ISSUE */}
-
         <h3 className="hw-h1">
           Engineering
           <br />
-
-          <span
-            style={{
-              color: ORANGE,
-              fontStyle: "italic",
-            }}
-          >
+          <span style={{ color: ORANGE, fontStyle: "italic" }}>
             Precision
           </span>
-
           <br />
-
           Machines
         </h3>
 
@@ -605,161 +622,107 @@ export default function Hero() {
           packaging machinery built for speed,
           scale, and reliability — trusted by
           manufacturers across Maharashtra
-          and 40+ cities worldwide.
+          and 12+ cities worldwide.
         </p>
 
         {/* STATS */}
-
         <div className="hw-stats">
-
           {[
-            {
-              value: "500+",
-              label: "Installs",
-            },
-
-            {
-              value: "40+",
-              label: "Cities",
-            },
-
-            {
-              value: "99%",
-              label: "Uptime",
-            },
-
-            {
-              value: "24h",
-              label: "Support",
-            },
+            { value: "50+", label: "Installs" },
+            { value: "12+",  label: "Cities"   },
+            { value: "99%",  label: "Uptime"   },
+            { value: "24h",  label: "Support"  },
           ].map(({ value, label }) => (
-            <div
-              key={label}
-              className="hw-stat"
-            >
-              <span className="hw-stat-n">
-                {value}
-              </span>
-
-              <span className="hw-stat-l">
-                {label}
-              </span>
+            <div key={label} className="hw-stat">
+              <span className="hw-stat-n">{value}</span>
+              <span className="hw-stat-l">{label}</span>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-
         <div className="hw-ctas">
-
-          <a
-            href="/machines"
-            className="hw-btn hw-btn-p"
-          >
+          <a href="/machines" className="hw-btn hw-btn-p">
             Explore Machines →
           </a>
-
-          <a
-            href="/contact"
-            className="hw-btn hw-btn-s"
-          >
+          <a href="/contact" className="hw-btn hw-btn-s">
             Request a Quote
           </a>
         </div>
 
         {/* CERTIFICATIONS */}
-
         <div className="hw-certs">
-
-          {[
-            "ISO 9001",
-            "CE Mark",
-            "FSSAI",
-            "Export Ready",
-          ].map((c) => (
-            <span
-              key={c}
-              className="hw-chip"
-            >
-              ✓ {c}
-            </span>
+          {["ISO 9001", "CE Mark", "FSSAI", "Export Ready"].map((c) => (
+            <span key={c} className="hw-chip">✓ {c}</span>
           ))}
         </div>
       </div>
-      /* ==========================================================================
-   HERO.JSX — FULL FINAL VERSION
-   PART 3 (CSS + END)
-========================================================================== */
 
-      {/* CSS */}
+      {/* ==========================================================================
+         HERO.JSX — FULL FINAL VERSION
+         PART 3 (CSS + END)
+      ========================================================================== */}
 
       <style>{`
 
         * {
-          box-sizing:border-box;
+          box-sizing: border-box;
         }
 
         .leaflet-container {
-          background:${NAVY};
+          background: ${NAVY};
         }
 
         .leaflet-popup-content-wrapper {
-          border-radius:12px;
-          padding:0;
-          overflow:hidden;
+          border-radius: 12px;
+          padding: 0;
+          overflow: hidden;
         }
 
         .leaflet-popup-content {
-          margin:0;
+          margin: 0;
         }
 
         .leaflet-popup-tip {
-          background:white;
+          background: white;
+        }
+
+        /* FIX #2: Leaflet marker panes must never suppress pointer events.
+           Some Leaflet versions set pointer-events:none on pane elements;
+           this override ensures markers are always tappable.             */
+        .leaflet-marker-pane,
+        .leaflet-marker-pane * {
+          pointer-events: auto !important;
         }
 
         .hw {
-          position:relative;
-
-          width:100%;
-
-          height:100svh;
-
-          min-height:740px;
-
-          overflow:hidden;
-
-          background:${NAVY};
-
-          font-family:
-            'Inter',
-            sans-serif;
+          position: relative;
+          width: 100%;
+          height: 100svh;
+          min-height: 740px;
+          overflow: hidden;
+          background: ${NAVY};
+          font-family: 'Inter', sans-serif;
         }
 
         .hw-map {
-          position:absolute;
-
-          inset:0;
-
-          z-index:0;
-
-          overflow:hidden;
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
         }
 
         .hw-map .leaflet-container {
-          width:100%;
-          height:100%;
+          width: 100%;
+          height: 100%;
         }
 
         .hw-veil-l {
-          position:absolute;
-
-          inset:0;
-
-          z-index:1;
-
-          pointer-events:none;
-
-          background:linear-gradient(
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          background: linear-gradient(
             105deg,
             rgba(17,24,39,0.70) 0%,
             rgba(17,24,39,0.52) 28%,
@@ -769,381 +732,262 @@ export default function Hero() {
         }
 
         .hw-dots {
-          position:absolute;
-
-          inset:0;
-
-          z-index:1;
-
-          pointer-events:none;
-
-          background-image:
-            radial-gradient(
-              rgba(255,255,255,0.04) 1px,
-              transparent 1px
-            );
-
-          background-size:28px 28px;
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          background-image: radial-gradient(
+            rgba(255,255,255,0.04) 1px,
+            transparent 1px
+          );
+          background-size: 28px 28px;
         }
 
+        /*
+          FIX #2: .hw-text previously covered the map with pointer-events
+          active, which swallowed taps on markers beneath it.
+          Setting pointer-events:none on the wrapper makes it transparent
+          to touches, then we selectively restore it on actual interactive
+          children (buttons, links, chips, text the user needs to read).
+        */
         .hw-text {
-          position:absolute;
+          position: absolute;
+          z-index: 10;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          width: min(92%, 520px);
+          padding-top:    clamp(20px, 3vh,  40px);
+          padding-bottom: clamp(18px, 4vh,  42px);
+          padding-left:   clamp(16px, 4vw,  72px);
+          padding-right:  clamp(16px, 3vw,  32px);
+          pointer-events: none;
+        }
 
-          z-index:10;
-
-          left:0;
-          right:0;
-          bottom:0;
-
-          display:flex;
-
-          flex-direction:column;
-
-          justify-content:flex-end;
-
-          width:min(92%,520px);
-
-          padding-top:
-            clamp(20px,3vh,40px);
-
-          padding-bottom:
-            clamp(18px,4vh,42px);
-
-          padding-left:
-            clamp(16px,4vw,72px);
-
-          padding-right:
-            clamp(16px,3vw,32px);
+        /* restore interactions on every child element that needs it */
+        .hw-text .hw-badge,
+        .hw-text .hw-h1,
+        .hw-text .hw-div,
+        .hw-text .hw-desc,
+        .hw-text .hw-stats,
+        .hw-text .hw-stat,
+        .hw-text .hw-ctas,
+        .hw-text .hw-btn,
+        .hw-text .hw-certs,
+        .hw-text .hw-chip,
+        .hw-text a,
+        .hw-text button {
+          pointer-events: auto;
         }
 
         .hw-badge {
-          display:inline-flex;
-
-          align-items:center;
-
-          gap:6px;
-
-          width:fit-content;
-
-          background:
-            rgba(255,140,0,0.12);
-
-          border:
-            1px solid rgba(255,140,0,0.35);
-
-          border-radius:4px;
-
-          padding:4px 10px;
-
-          font-size:
-            clamp(0.42rem,1vw,0.54rem);
-
-          font-weight:800;
-
-          letter-spacing:0.18em;
-
-          text-transform:uppercase;
-
-          color:${ORANGE};
-
-          margin-bottom:12px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          width: fit-content;
+          background: rgba(255,140,0,0.12);
+          border: 1px solid rgba(255,140,0,0.35);
+          border-radius: 4px;
+          padding: 4px 10px;
+          font-size: clamp(0.42rem, 1vw, 0.54rem);
+          font-weight: 800;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: ${ORANGE};
+          margin-bottom: 12px;
         }
 
-        /* FIXED ENGINEERING BREAK ISSUE */
-
         .hw-h1 {
-          font-size:
-            clamp(2.4rem,6vw,5rem);
-
-          font-weight:900;
-
-          line-height:0.88;
-
-          color:${WHITE};
-
-          margin:
-            0 0 clamp(6px,1vh,10px);
-
-          letter-spacing:-0.04em;
-
-          text-wrap:balance;
-
-          word-break:normal;
-
-          overflow-wrap:normal;
-
-          max-width:100%;
-
-          text-shadow:
-            0 2px 24px rgba(0,0,0,0.35);
+          font-size: clamp(2.4rem, 6vw, 5rem);
+          font-weight: 900;
+          line-height: 0.88;
+          color: ${WHITE};
+          margin: 0 0 clamp(6px, 1vh, 10px);
+          letter-spacing: -0.04em;
+          text-wrap: balance;
+          word-break: normal;
+          overflow-wrap: normal;
+          max-width: 100%;
+          text-shadow: 0 2px 24px rgba(0,0,0,0.35);
         }
 
         .hw-div {
-          width:
-            clamp(24px,5vw,40px);
-
-          height:3px;
-
-          background:${ORANGE};
-
-          border-radius:2px;
-
-          margin-bottom:
-            clamp(6px,1.2vh,12px);
+          width: clamp(24px, 5vw, 40px);
+          height: 3px;
+          background: ${ORANGE};
+          border-radius: 2px;
+          margin-bottom: clamp(6px, 1.2vh, 12px);
         }
 
         .hw-desc {
-          font-size:
-            clamp(0.72rem,1.7vw,0.92rem);
-
-          line-height:1.45;
-
-          color:
-            rgba(255,255,255,0.68);
-
-          margin-bottom:
-            clamp(8px,1.6vh,16px);
-
-          max-width:92%;
+          font-size: clamp(0.72rem, 1.7vw, 0.92rem);
+          line-height: 1.45;
+          color: rgba(255,255,255,0.68);
+          margin-bottom: clamp(8px, 1.6vh, 16px);
+          max-width: 92%;
         }
 
         .hw-stats {
-          display:grid;
-
-          grid-template-columns:
-            repeat(4,1fr);
-
-          width:100%;
-
-          background:
-            rgba(17,24,39,0.52);
-
-          backdrop-filter:
-            blur(14px);
-
-          border:
-            1px solid rgba(255,255,255,0.07);
-
-          border-radius:8px;
-
-          overflow:hidden;
-
-          margin-bottom:14px;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          width: 100%;
+          background: rgba(17,24,39,0.52);
+          backdrop-filter: blur(14px);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 8px;
+          overflow: hidden;
+          margin-bottom: 14px;
         }
 
         .hw-stat {
-          padding:8px 4px;
-
-          text-align:center;
-
-          border-right:
-            1px solid rgba(255,255,255,0.06);
-
-          display:flex;
-
-          flex-direction:column;
-
-          gap:1px;
+          padding: 8px 4px;
+          text-align: center;
+          border-right: 1px solid rgba(255,255,255,0.06);
+          display: flex;
+          flex-direction: column;
+          gap: 1px;
         }
 
         .hw-stat:last-child {
-          border-right:none;
+          border-right: none;
         }
 
         .hw-stat-n {
-          font-size:
-            clamp(0.82rem,2vw,1.5rem);
-
-          font-weight:900;
-
-          color:${WHITE};
-
-          line-height:1;
+          font-size: clamp(0.82rem, 2vw, 1.5rem);
+          font-weight: 900;
+          color: ${WHITE};
+          line-height: 1;
         }
 
         .hw-stat-l {
-          font-size:
-            clamp(0.38rem,1vw,0.54rem);
-
-          font-weight:700;
-
-          letter-spacing:0.08em;
-
-          text-transform:uppercase;
-
-          color:
-            rgba(255,255,255,0.38);
+          font-size: clamp(0.38rem, 1vw, 0.54rem);
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.38);
         }
 
         .hw-ctas {
-          display:flex;
-
-          flex-wrap:wrap;
-
-          gap:8px;
-
-          margin-bottom:12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 12px;
         }
 
         .hw-btn {
-          display:inline-flex;
-
-          align-items:center;
-
-          justify-content:center;
-
-          padding:9px 14px;
-
-          border-radius:5px;
-
-          font-size:
-            clamp(0.56rem,1.4vw,0.72rem);
-
-          font-weight:700;
-
-          letter-spacing:0.05em;
-
-          text-transform:uppercase;
-
-          text-decoration:none;
-
-          cursor:pointer;
-
-          transition:
-            transform 0.2s ease,
-            opacity 0.2s ease;
-
-          border:none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 9px 14px;
+          border-radius: 5px;
+          font-size: clamp(0.56rem, 1.4vw, 0.72rem);
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          text-decoration: none;
+          cursor: pointer;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+          border: none;
         }
 
         .hw-btn:hover {
-          transform:translateY(-1px);
+          transform: translateY(-1px);
         }
 
         .hw-btn-p {
-          background:${ORANGE};
-
-          color:${WHITE};
-
-          box-shadow:
-            0 8px 22px
-            rgba(255,140,0,0.24);
+          background: ${ORANGE};
+          color: ${WHITE};
+          box-shadow: 0 8px 22px rgba(255,140,0,0.24);
         }
 
         .hw-btn-s {
-          background:
-            rgba(255,255,255,0.10);
-
-          color:${WHITE};
-
-          border:
-            1px solid rgba(255,255,255,0.20);
+          background: rgba(255,255,255,0.10);
+          color: ${WHITE};
+          border: 1px solid rgba(255,255,255,0.20);
         }
 
         .hw-certs {
-          display:flex;
-
-          flex-wrap:wrap;
-
-          gap:5px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
         }
 
         .hw-chip {
-          display:inline-flex;
-
-          align-items:center;
-
-          gap:3px;
-
-          background:
-            rgba(17,24,39,0.46);
-
-          border:
-            1px solid rgba(255,255,255,0.08);
-
-          border-radius:100px;
-
-          padding:3px 8px;
-
-          font-size:
-            clamp(0.40rem,1vw,0.54rem);
-
-          font-weight:700;
-
-          letter-spacing:0.08em;
-
-          text-transform:uppercase;
-
-          color:
-            rgba(255,255,255,0.42);
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          background: rgba(17,24,39,0.46);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 100px;
+          padding: 3px 8px;
+          font-size: clamp(0.40rem, 1vw, 0.54rem);
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.42);
         }
 
         /* =====================================================
            MOBILE FIXES
         ===================================================== */
 
-        @media (max-width:479px) {
+        @media (max-width: 479px) {
 
+          /* FIX #1: no CSS transform on the map canvas.
+             MapViewController handles all framing via map.setView(). */
           .leaflet-container {
-            transform:scale(1.08);
-
-            transform-origin:center;
+            transform: none;
           }
 
           .hw-map {
-            filter:
-              brightness(1.1)
-              contrast(1.05);
+            filter: brightness(1.1) contrast(1.05);
           }
 
           .hw {
-            min-height:100svh;
+            min-height: 100svh;
           }
 
           .hw-text {
-
-            justify-content:flex-end;
-
-            width:100%;
-
-            max-width:100%;
-
-            padding-left:18px;
-
-            padding-right:18px;
-
-            padding-bottom:20px;
+            justify-content: flex-end;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 18px;
+            padding-right: 18px;
+            padding-bottom: 20px;
           }
 
           .hw-h1 {
-            font-size:3.6rem;
-
-            line-height:0.86;
-
-            letter-spacing:-0.05em;
-
-            max-width:92%;
+            font-size: 2.2rem;
+            line-height: 0.90;
+            letter-spacing: -0.04em;
+            max-width: 92%;
           }
 
           .hw-desc {
-            max-width:100%;
+            max-width: 100%;
           }
 
           .hw-veil-l {
+            background: linear-gradient(
+              180deg,
+              rgba(17,24,39,0.56) 0%,
+              rgba(17,24,39,0.44) 45%,
+              rgba(17,24,39,0.18) 75%,
+              rgba(17,24,39,0.02) 100%
+            );
+          }
 
-            background:
-              linear-gradient(
-                180deg,
-                rgba(17,24,39,0.56) 0%,
-                rgba(17,24,39,0.44) 45%,
-                rgba(17,24,39,0.18) 75%,
-                rgba(17,24,39,0.02) 100%
-              );
+          /* FIX #2: raise popup above all overlays on mobile */
+          .leaflet-popup {
+            z-index: 9999 !important;
           }
 
           .leaflet-popup-content-wrapper {
-            transform:scale(0.92);
-            transform-origin:bottom center;
+            transform: scale(0.92);
+            transform-origin: bottom center;
           }
         }
 

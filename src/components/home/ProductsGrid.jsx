@@ -589,7 +589,7 @@ export default function ProductsGrid() {
       <div className="pg-topband">
         <div className="pg-ticker">
           {[...Array(2)].map((_, ri) =>
-            ["ISO 9001 Certified", "Made in India", "500+ Installations", "40+ Cities Served", "Custom Engineering", "After-Sales Support", "99.2% Uptime Record", "PLC Controlled", "Stainless Steel Construction"].map((t, i) => (
+            ["ISO 9001 Certified", "Made in India", "50+ Installations", "12+ Cities Served", "Custom Engineering", "After-Sales Support", "99.2% Uptime Record", "PLC Controlled", "Stainless Steel Construction"].map((t, i) => (
               <span className="pg-ticker-item" key={`${ri}-${i}`}>
                 <span className="pg-ticker-dot" />
                 {t}

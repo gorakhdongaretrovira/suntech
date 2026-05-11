@@ -22,7 +22,7 @@ const FEATURES = [
       </svg>
     ),
     title: "Customer Stories",
-    desc: "Real testimonials and case studies from 500+ clients across India and abroad.",
+    desc: "Real testimonials and case studies from 50+ clients across India.",
     tag: "Testimonials",
     link: "/media/stories",
   },
@@ -42,8 +42,8 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { num: "500+", label: "Installations" },
-  { num: "40+", label: "Cities" },
+  { num: "50+", label: "Installations" },
+  { num: "12+", label: "Cities" },
   { num: "15+", label: "Years" },
   { num: "99%", label: "Uptime" },
 ];

@@ -5,26 +5,32 @@ const GLOBAL_CSS = `
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --blue-dark:  #111827;
-    --blue-mid:   #1f2937;
-    --blue-brand: #111827;
-    --blue-light: #1f2937;
-    --blue-pale:  rgba(17,24,39,0.05);
-    --accent:     #f5a623;
-    --accent-lt:  #ffd07a;
-    --white:      #ffffff;
-    --off-white:  #f0f5fc;
-    --text:       #1a2d4a;
-    --text-muted: #6e8db5;
-    --border:     rgba(17,24,39,0.12);
-    --border-dk:  rgba(17,24,39,0.08);
-  }
+:root {
+  --blue-dark:  #111827;
+  --blue-mid:   #1f2937;
+  --blue-brand: #111827;
+  --blue-light: #1f2937;
+  --blue-pale:  rgba(17,24,39,0.05);
+  --accent:     #f5a623;
+  --accent-lt:  #ffd07a;
+  --white:      #ffffff;
+  --off-white:  #ffffff;
+  --text:       #1a2d4a;
+  --text-muted: #6e8db5;
+  --border:     rgba(17,24,39,0.12);
+  --border-dk:  rgba(17,24,39,0.08);
+}
 
-  html { scroll-behavior: smooth; }
-  body { background: var(--off-white); color: var(--text); font-family: 'Barlow', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+html { scroll-behavior: smooth; }
 
-  /* ── Scroll reveal ── */
+body {
+  background: #ffffff;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in { opacity: 1; transform: none; }
   .reveal-d1 { transition-delay: .1s; }
@@ -32,7 +38,6 @@ const GLOBAL_CSS = `
   .reveal-d3 { transition-delay: .3s; }
   .reveal-d4 { transition-delay: .4s; }
 
-  /* ── Tag pill ── */
   .tag-pill {
     display: inline-flex; align-items: center; gap: 7px;
     font-family: 'Barlow Condensed', sans-serif;
@@ -48,7 +53,6 @@ const GLOBAL_CSS = `
     background: var(--accent); flex-shrink: 0;
   }
 
-  /* ── Section label ── */
   .section-label {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 11px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase;
@@ -61,7 +65,6 @@ const GLOBAL_CSS = `
     background: var(--blue-brand); border-radius: 2px;
   }
 
-  /* ── Stat card ── */
   .stat-card {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -90,7 +93,6 @@ const GLOBAL_CSS = `
     color: var(--text-muted); font-weight: 600;
   }
 
-  /* ── Why card ── */
   .why-card {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -124,7 +126,6 @@ const GLOBAL_CSS = `
   }
   .why-card p { font-size: 14px; line-height: 1.7; color: var(--text-muted); font-weight: 400; }
 
-  /* ── Value row ── */
   .value-row {
     display: flex; align-items: flex-start; gap: 16px;
     padding: 20px 0; border-bottom: 1px solid var(--border);
@@ -138,7 +139,6 @@ const GLOBAL_CSS = `
   .value-row p { font-size: 15px; line-height: 1.65; color: var(--text-muted); }
   .value-row strong { color: var(--blue-dark); font-weight: 700; display: block; margin-bottom: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; letter-spacing: .04em; text-transform: uppercase; }
 
-  /* ── Marquee ── */
   .marquee-wrap { overflow: hidden; position: relative; background: var(--blue-dark); }
   .marquee-wrap::before, .marquee-wrap::after {
     content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
@@ -157,7 +157,6 @@ const GLOBAL_CSS = `
   }
   .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-  /* ── CTA Button ── */
   .cta-btn {
     display: inline-flex; align-items: center; gap: 10px;
     background: var(--blue-brand); color: var(--white);
@@ -182,7 +181,6 @@ const GLOBAL_CSS = `
   }
   .cta-btn-ghost:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.07); transform: translateY(-2px); }
 
-  /* ── Hero blueprint grid ── */
   .hero-grid-bg {
     position: absolute; inset: 0; pointer-events: none; overflow: hidden;
     background-image:
@@ -190,12 +188,192 @@ const GLOBAL_CSS = `
       linear-gradient(90deg, rgba(18,81,163,0.07) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+
+  /* ── Vision / Mission cards ── */
+  .vm-card {
+    border-radius: 14px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .vm-card:hover { transform: translateY(-4px); }
+
+  /* VISION — dark navy with amber accent */
+  .vm-card-vision {
+    background: #0d1526;
+    border: 1.5px solid rgba(245,166,35,0.18);
+    box-shadow: 0 8px 40px rgba(13,21,38,0.22);
+  }
+  /* MISSION — white with brand accent bar */
+  .vm-card-mission {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-left: 5px solid var(--accent);
+    box-shadow: 0 4px 24px rgba(17,24,39,0.07);
+  }
+
+  .vm-icon-wrap {
+    width: 56px; height: 56px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px; flex-shrink: 0;
+  }
+  .vm-card-vision .vm-icon-wrap {
+    background: rgba(245,166,35,0.14);
+    border: 1.5px solid rgba(245,166,35,0.28);
+  }
+  .vm-card-mission .vm-icon-wrap {
+    background: var(--blue-pale);
+    border: 1.5px solid var(--border);
+  }
+
+  .vm-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 800; letter-spacing: .28em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .vm-badge::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  }
+  .vm-card-vision .vm-badge {
+    background: rgba(245,166,35,0.12);
+    border: 1px solid rgba(245,166,35,0.3);
+    color: var(--accent);
+  }
+  .vm-card-vision .vm-badge::before { background: var(--accent); }
+  .vm-card-mission .vm-badge {
+    background: var(--blue-pale);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .vm-card-mission .vm-badge::before { background: var(--blue-brand); }
+
+  .vm-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(24px, 6vw, 32px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -.01em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .vm-card-vision .vm-heading { color: #ffffff; }
+  .vm-card-mission .vm-heading { color: var(--blue-dark); }
+
+  /* the "we don't just deliver machines" tagline */
+  .vm-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(15px, 3.5vw, 18px);
+    font-weight: 700; font-style: italic;
+    line-height: 1.35; margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 8px;
+  }
+  .vm-card-vision .vm-tagline {
+    color: var(--accent);
+    background: rgba(245,166,35,0.08);
+    border-left: 3px solid rgba(245,166,35,0.5);
+  }
+  .vm-card-mission .vm-tagline {
+    color: var(--blue-brand);
+    background: var(--blue-pale);
+    border-left: 3px solid var(--blue-brand);
+    opacity: 0.85;
+  }
+
+  .vm-body {
+    font-size: 14px; line-height: 1.78; font-weight: 400; margin-bottom: 20px;
+  }
+  .vm-card-vision .vm-body { color: rgba(180,205,240,0.72); }
+  .vm-card-mission .vm-body { color: var(--text-muted); }
+
+  .vm-points {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 11px;
+  }
+  .vm-points li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .vm-card-vision .vm-points li { color: rgba(180,205,240,0.75); }
+  .vm-card-mission .vm-points li { color: var(--text-muted); }
+  .vm-points li::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .vm-card-vision .vm-points li::before { background: var(--accent); }
+  .vm-card-mission .vm-points li::before { background: var(--blue-brand); }
+
+  /* vision ambient glow */
+  .vm-card-vision::after {
+    content: '';
+    position: absolute; top: -50px; right: -50px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* clients grid */
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .client-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 12px;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .client-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17,24,39,0.09); }
+  .client-icon {
+    width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .client-card .client-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: .05em; text-transform: uppercase;
+    color: var(--blue-dark); line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .client-card .client-sector {
+    font-size: 11px; color: var(--text-muted); font-weight: 500;
+    letter-spacing: .04em;
+  }
+
+  @media (min-width: 600px) {
+    .vm-grid { display: grid !important; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .clients-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 `;
 
 const MARQUEE_ITEMS = [
   "Packaging Machinery","Pharmaceutical","Food & Beverage",
   "Manufacturing","Export Quality","ISO Certified",
   "Smart Automation","Custom Solutions","Established 2003",
+];
+
+const CLIENTS = [
+  { icon: "💊", name: "Cipla Ltd", sector: "Pharmaceutical" },
+  { icon: "🧴", name: "Marico", sector: "FMCG" },
+  { icon: "🌾", name: "ITC Agro", sector: "Food & Agri" },
+  { icon: "🏭", name: "Godrej Industries", sector: "Manufacturing" },
+  { icon: "🥛", name: "Amul Co-op", sector: "Dairy & Food" },
+  { icon: "⚗️", name: "Sun Pharma", sector: "Pharmaceutical" },
+];
+
+const CLIENT_ICON_COLORS = [
+  { bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
+  { bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
+  { bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
+  { bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
+  { bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
+  { bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
 ];
 
 function useReveal() {
@@ -292,24 +470,23 @@ export default function About() {
     <>
       <style>{GLOBAL_CSS}</style>
 
-      <div style={{ minHeight: "100vh", overflowX: "hidden" }}>
+      <div style={{ minHeight: "100vh", overflowX: "hidden", background: "#ffffff" }}>
 
         {/* ── HERO ── */}
-        <section style={{ background: "var(--blue-dark)", position: "relative", padding: "100px 24px 80px", overflow: "hidden" }}>
+        <section style={{ background: "#0d1526", position: "relative", padding: "100px 24px 80px", overflow: "hidden" }}>
           <div className="hero-grid-bg" />
 
-          {/* accent corner */}
           <div style={{
             position: "absolute", top: 0, right: 0,
             width: 240, height: 240,
-            background: "linear-gradient(225deg, rgba(245,166,35,0.1) 0%, transparent 70%)",
+            background: "linear-gradient(225deg, rgba(245,166,35,0.12) 0%, transparent 70%)",
             pointerEvents: "none",
           }} />
 
           <div style={{ position: "relative", zIndex: 1, maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
 
             <div className="reveal" style={{ marginBottom: 20 }}>
-              <span className="tag-pill" style={{ background: "rgba(245,166,35,0.12)", border: "1.5px solid rgba(245,166,35,0.3)", color: "var(--accent)" }}>
+              <span className="tag-pill" style={{ background: "rgba(245,166,35,0.12)", border: "1.5px solid rgba(245,166,35,0.3)", color: "#f5a623" }}>
                 Established 2003
               </span>
             </div>
@@ -325,7 +502,7 @@ export default function About() {
               }}
             >
               About<br />
-              <span style={{ color: "var(--blue-light)" }}>SunTech</span>
+              <span style={{ color: "#f5a623" }}>SunTech</span>
             </h1>
 
             <p
@@ -341,12 +518,8 @@ export default function About() {
             </p>
 
             <div className="reveal reveal-d3" style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-              <button className="cta-btn">
-                Our Story <ArrowIcon />
-              </button>
-              <button className="cta-btn-ghost">
-                View Projects
-              </button>
+              <button className="cta-btn">Our Story <ArrowIcon /></button>
+              <button className="cta-btn-ghost">View Projects</button>
             </div>
 
           </div>
@@ -356,7 +529,7 @@ export default function About() {
         <Marquee />
 
         {/* ── WHO WE ARE ── */}
-        <section style={{ padding: "72px 24px", maxWidth: 760, margin: "0 auto" }}>
+        <section style={{ padding: "72px 24px", maxWidth: 760, margin: "0 auto", background: "#ffffff" }}>
           <div className="section-label reveal">Who We Are</div>
 
           <h2
@@ -365,29 +538,247 @@ export default function About() {
               fontFamily: "'Barlow Condensed', sans-serif",
               fontSize: "clamp(32px, 7vw, 52px)",
               fontWeight: 900, lineHeight: 1.05,
-              color: "var(--blue-dark)", textTransform: "uppercase",
+              color: "#111827", textTransform: "uppercase",
               letterSpacing: "-.01em", marginBottom: 40,
+              background: "transparent", padding: 0, display: "block",
             }}
           >
             Precision. Scale.<br />
-            <span style={{ color: "var(--blue-brand)", fontStyle: "italic" }}>Reliability.</span>
+            <span style={{ color: "#111827", fontStyle: "italic", background: "transparent", padding: 0, display: "inline" }}>
+              Reliability.
+            </span>
           </h2>
 
           <div>
             <div className="value-row reveal reveal-d1">
               <div className="dot" />
-              <p><strong>Our Mission</strong>Suntech is a leading manufacturer of packaging machinery, delivering cutting-edge solutions for food, pharmaceutical, and industrial sectors worldwide.</p>
+              <p>
+                <strong>Who We Are</strong>
+                Suntech is a leading manufacturer of packaging machinery,
+                delivering cutting-edge solutions for food, pharmaceutical, and industrial
+                sectors across India and beyond.
+              </p>
             </div>
             <div className="value-row reveal reveal-d2">
-              <div className="dot" style={{ background: "var(--accent)", borderColor: "rgba(245,166,35,0.3)" }} />
-              <p><strong>Our Promise</strong>Efficient, durable, high-performance machines engineered to help businesses scale production without compromise.</p>
-            </div>
-            <div className="value-row reveal reveal-d3">
-              <div className="dot" />
-              <p><strong>Global Reach</strong>Trusted by manufacturers across 40+ Cities, our machines run millions of cycles in demanding environments every day.</p>
+              <div className="dot" style={{ background: "#f5a623", borderColor: "rgba(245,166,35,0.3)" }} />
+              <p>
+                <strong>Our Difference</strong>
+                Efficient, durable, high-performance machines engineered
+                to help businesses scale production without compromise.
+              </p>
             </div>
           </div>
         </section>
+
+        {/* ── TAGLINE BANNER ── */}
+        <section style={{ padding: "0 24px 64px", background: "#ffffff" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto" }}>
+            <div
+              className="reveal"
+              style={{
+                background: "#0d1526",
+                borderRadius: 14,
+                border: "1.5px solid rgba(245,166,35,0.18)",
+                padding: "44px 36px",
+                textAlign: "center",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              {/* subtle grid */}
+              <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+                backgroundSize: "36px 36px",
+              }} />
+              {/* top amber line */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "#f5a623", borderRadius: "14px 14px 0 0" }} />
+
+              {/* quote mark */}
+              <div style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: 72, fontWeight: 900, lineHeight: 0.7,
+                color: "rgba(245,166,35,0.18)",
+                marginBottom: 16,
+                position: "relative", zIndex: 1,
+                userSelect: "none",
+              }}>
+                "
+              </div>
+
+              <p
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  fontSize: "clamp(22px, 5.5vw, 34px)",
+                  fontWeight: 800,
+                  fontStyle: "italic",
+                  lineHeight: 1.25,
+                  color: "#ffffff",
+                  position: "relative", zIndex: 1,
+                  marginBottom: 20,
+                  letterSpacing: "-.01em",
+                }}
+              >
+                We don't just deliver machines —<br />
+                <span style={{ color: "#f5a623" }}>
+                 we engineer the future of production.
+                </span>
+              </p>
+
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                position: "relative", zIndex: 1,
+              }}>
+                <div style={{ width: 28, height: 1.5, background: "rgba(245,166,35,0.4)", borderRadius: 2 }} />
+                <span style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  fontSize: 11, fontWeight: 700,
+                  letterSpacing: ".22em", textTransform: "uppercase",
+                  color: "rgba(245,166,35,0.6)",
+                }}>
+                  Suntech Packaging · Est. 2003
+                </span>
+                <div style={{ width: 28, height: 1.5, background: "rgba(245,166,35,0.4)", borderRadius: 2 }} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════
+            VISION & MISSION
+        ════════════════════════════════════════ */}
+        <section style={{ padding: "0 24px 72px", background: "#ffffff" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto" }}>
+
+            <div className="section-label reveal">Our Purpose</div>
+            <h2
+              className="reveal reveal-d1"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: "clamp(30px, 6vw, 48px)",
+                fontWeight: 900, lineHeight: 1.05,
+                color: "var(--blue-dark)", textTransform: "uppercase",
+                letterSpacing: "-.01em", marginBottom: 32,
+              }}
+            >
+              What Drives<br />
+              <span style={{ color: "#f5a623" }}>Everything We Build.</span>
+            </h2>
+
+            {/* Vision + Mission stacked mobile, side-by-side tablet+ */}
+            <div
+              className="vm-grid reveal reveal-d2"
+              style={{ display: "flex", flexDirection: "column", gap: 20 }}
+            >
+
+              {/* ── VISION CARD ── */}
+              <div className="vm-card vm-card-vision">
+                <div className="vm-icon-wrap">
+                  <span style={{ fontSize: 26 }}>🔭</span>
+                </div>
+                <div className="vm-badge">Vision</div>
+
+                <div className="vm-heading">
+                  India's Most Trusted<br />Packaging Partner
+                </div>
+
+                <div className="vm-tagline">
+                  "Building machines that build businesses — one shift at a time."
+                </div>
+
+                <p className="vm-body">
+                  To be the most reliable and innovative packaging machinery manufacturer in India —
+                  empowering manufacturers at every scale with technology that is precise,
+                  durable, and built for what comes next.
+                </p>
+
+                <ul className="vm-points">
+                  <li>Lead packaging automation across India and South Asia</li>
+                  <li>Set the benchmark for after-sales service and machine uptime</li>
+                  <li>Make export-grade machinery accessible to manufacturers of every size</li>
+                </ul>
+              </div>
+
+              {/* ── MISSION CARD ── */}
+              <div className="vm-card vm-card-mission">
+                <div className="vm-icon-wrap">
+                  <span style={{ fontSize: 26 }}>🎯</span>
+                </div>
+                <div className="vm-badge">Mission</div>
+
+                <div className="vm-heading">
+                  Precision Engineering,<br />Zero Compromise
+                </div>
+
+                <div className="vm-tagline">
+                  "Cost-effective. Low maintenance. Maximum output — every single shift."
+                </div>
+
+                <p className="vm-body">
+                  To deliver industrial-grade packaging machinery that reduces downtime,
+                  lowers operational costs, and maximises production output — backed by
+                  continuous R&amp;D and a team that stays with you long after installation.
+                </p>
+
+                <ul className="vm-points">
+                  <li>Engineer every machine to exceed international quality standards</li>
+                  <li>Provide end-to-end support from installation to yearly maintenance</li>
+                  <li>Continuously innovate through research and real customer feedback</li>
+                  <li>Deliver on-time, every time — with zero excuses</li>
+                </ul>
+              </div>
+
+            </div>
+
+            {/* Core values strip */}
+            <div
+              className="reveal reveal-d3"
+              style={{
+                marginTop: 20,
+                background: "var(--white)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 10,
+                padding: "24px 20px",
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "16px 12px",
+              }}
+            >
+              {[
+                { icon: "⚙️", label: "Engineering First", bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
+                { icon: "🤝", label: "Customer Trust",    bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
+                { icon: "🔬", label: "Continuous R&D",   bg: "rgba(17,24,39,0.06)", border: "rgba(17,24,39,0.12)" },
+                { icon: "🛡️", label: "Zero Downtime",    bg: "rgba(245,166,35,0.10)", border: "rgba(245,166,35,0.25)" },
+              ].map(({ icon, label, bg, border }) => (
+                <div key={label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 7, flexShrink: 0,
+                    background: bg, border: `1.5px solid ${border}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 16,
+                  }}>
+                    {icon}
+                  </div>
+                  <span style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: 13, fontWeight: 800,
+                    letterSpacing: ".06em", textTransform: "uppercase",
+                    color: "var(--blue-dark)",
+                  }}>
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+        {/* ════════════════════════════════════════
+            END VISION & MISSION
+        ════════════════════════════════════════ */}
 
         {/* ── STATS ── */}
         <section style={{ padding: "0 24px 72px", background: "var(--white)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
@@ -406,17 +797,68 @@ export default function About() {
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
-              <StatCard value="20+" label="Years Experience" delay={0} />
-              <StatCard value="500+" label="Machines Delivered" delay={0.1} />
-              <StatCard value="100+" label="Global Clients" delay={0.2} />
-              <StatCard value="40+" label="Cities Served" delay={0.3} />
+              <StatCard value="20+"  label="Years Experience"    delay={0}   />
+              <StatCard value="50+" label="Machines Delivered"  delay={0.1} />
+              <StatCard value="100+" label="Clients"             delay={0.2} />
+              <StatCard value="12+"  label="Cities Served"       delay={0.3} />
             </div>
           </div>
         </section>
 
-        {/* ── WHY CHOOSE US ── */}
-        <section style={{ padding: "72px 24px" }}>
+        {/* ── CLIENTS ── */}
+        <section style={{ padding: "72px 24px", background: "#ffffff" }}>
           <div style={{ maxWidth: 760, margin: "0 auto" }}>
+
+            <div className="section-label reveal">Our Clients</div>
+            <h2
+              className="reveal reveal-d1"
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontSize: "clamp(28px, 6vw, 44px)",
+                fontWeight: 900, lineHeight: 1.05,
+                color: "var(--blue-dark)", textTransform: "uppercase",
+                letterSpacing: "-.01em", marginBottom: 32,
+              }}
+            >
+              Trusted By<br />
+              <span style={{ color: "#f5a623" }}>Industry Leaders.</span>
+            </h2>
+
+            <div className="clients-grid reveal reveal-d2">
+              {CLIENTS.map((c, i) => (
+                <div className="client-card" key={c.name}>
+                  <div
+                    className="client-icon"
+                    style={{ background: CLIENT_ICON_COLORS[i].bg, border: `1.5px solid ${CLIENT_ICON_COLORS[i].border}`, borderRadius: 8 }}
+                  >
+                    {c.icon}
+                  </div>
+                  <div>
+                    <div className="client-name">{c.name}</div>
+                    <div className="client-sector">{c.sector}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p
+              className="reveal reveal-d3"
+              style={{
+                marginTop: 20, textAlign: "center",
+                fontSize: 13, color: "var(--text-muted)",
+                fontFamily: "'Barlow Condensed', sans-serif",
+                letterSpacing: ".08em", textTransform: "uppercase",
+                fontWeight: 600,
+              }}
+            >
+              + 90 more manufacturers across India
+            </p>
+          </div>
+        </section>
+
+        {/* ── WHY CHOOSE US ── */}
+        <section style={{ padding: "0 24px 72px", background: "#ffffff", borderTop: "1px solid var(--border)" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", paddingTop: 56 }}>
 
             <div style={{ marginBottom: 40 }}>
               <div className="section-label reveal">Why Choose Us</div>
@@ -457,7 +899,7 @@ export default function About() {
               <WhyCard
                 icon="🌍"
                 title="Export-Grade Manufacturing"
-                desc="Designed for global deployment — compliant with CE, ISO, and regional standards across 40+ Cities."
+                desc="Designed for global deployment — compliant with CE, ISO, and regional standards across 12+ cities."
                 delay={0.3}
               />
             </div>
@@ -465,26 +907,24 @@ export default function About() {
         </section>
 
         {/* ── BOTTOM CTA BAND ── */}
-        <section style={{ padding: "0 24px 64px" }}>
+        <section style={{ padding: "0 24px 64px", background: "#ffffff" }}>
           <div
             style={{
               maxWidth: 760, margin: "0 auto",
-              background: "var(--blue-dark)",
-              borderRadius: 12,
-              border: "1.5px solid rgba(255,255,255,0.08)",
+              background: "#0d1526",
+              borderRadius: 14,
+              border: "1.5px solid rgba(245,166,35,0.14)",
               padding: "56px 40px",
               textAlign: "center",
               position: "relative", overflow: "hidden",
             }}
           >
-            {/* grid bg */}
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              backgroundImage: "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+              backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
               backgroundSize: "40px 40px",
             }} />
-            {/* accent top border */}
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "var(--blue-brand)" }} />
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "#f5a623" }} />
 
             <div
               className="reveal"
@@ -497,7 +937,7 @@ export default function About() {
               }}
             >
               Ready to Scale<br />
-              <span style={{ color: "var(--accent)" }}>Your Production?</span>
+              <span style={{ color: "#f5a623" }}>Your Production?</span>
             </div>
 
             <p
@@ -521,8 +961,8 @@ export default function About() {
 
         {/* ── FOOTER NOTE ── */}
         <footer style={{
-          borderTop: "2px solid var(--blue-brand)",
-          background: "var(--blue-dark)",
+          borderTop: "2px solid #f5a623",
+          background: "#0d1526",
           padding: "20px 24px",
           textAlign: "center",
           color: "rgba(192,215,245,0.4)",

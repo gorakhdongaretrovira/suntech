@@ -619,7 +619,7 @@ export default function Applications() {
         <div className="app-topband">
           <div className="app-ticker">
             {[...Array(2)].map((_, ri) =>
-              ["Food Industry", "Pharma Packaging", "Agro Products", "FMCG Lines", "Custom Solutions", "ISO 9001 Certified", "500+ Installations", "40+ Cities"].map((t, i) => (
+              ["Food Industry", "Pharma Packaging", "Agro Products", "FMCG Lines", "Custom Solutions", "ISO 9001 Certified", "50+ Installations", "12+ Cities"].map((t, i) => (
                 <span className="app-ticker-item" key={`${ri}-${i}`}>
                   <span className="app-ticker-dot" />
                   {t}
