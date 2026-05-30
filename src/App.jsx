@@ -16,7 +16,9 @@ import Solutions from "./pages/Solutions";
 import Projects from "./pages/Projects";
 import Brochure from "./pages/Brochure";
 import FAQ from "./pages/FAQ";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import WhatsAppButton from "./components/common/WhatsAppButton";
+// import CookieBanner from "./components/CookieBanner";
 
 const Services = () => (
   <div className="text-white text-3xl text-center mt-20">
@@ -56,6 +58,7 @@ export default function App() {
               <Route path="/projects" element={<Projects />} />
               <Route path="/brochure" element={<Brochure />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
               {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
@@ -63,6 +66,7 @@ export default function App() {
           </main>
 
           <Footer />
+          {/* <CookieBanner /> */}
           <WhatsAppButton />
         </>
       )}

@@ -375,15 +375,56 @@ export default function Footer() {
           padding: 4px 10px; border-radius: 3px;
         }
 
+        /* Trovira badge: animated gradient text + premium hover/floating effect */
+        .ft-trovira-badge {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 5px 12px 5px 8px; border-radius: 999px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(245,166,35,0.18);
+          text-decoration: none; color: inherit;
+          transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                      box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+          will-change: transform;
+        }
+
+        .ft-trovira-badge .ft-trovira-dot { width:6px; height:6px; border-radius:50%; background:#f5a623; box-shadow:0 0 8px rgba(245,166,35,0.7); flex-shrink:0; }
+
+        .ft-trovira-text {
+          background: linear-gradient(90deg, rgba(255,255,255,0.9), #f5a623, rgba(255,255,255,0.9));
+          background-size: 200% auto;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+          background-clip: text; font-family: 'Barlow Condensed', sans-serif;
+          font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+          display: inline-block; transition: transform 0.28s ease, filter 0.25s ease;
+          animation: trovira-shift 3.2s linear infinite;
+        }
+
+        @keyframes trovira-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .ft-trovira-badge:hover {
+          transform: translate(-2px, -4px);
+          background: rgba(245,166,35,0.03);
+          border-color: rgba(245,166,35,0.35);
+          box-shadow: 8px 12px 30px rgba(0,0,0,0.5), 0 6px 18px rgba(245,166,35,0.12);
+        }
+        .ft-trovira-badge:hover .ft-trovira-text {
+          transform: translateY(-1px) scale(1.02);
+          filter: drop-shadow(0 6px 24px rgba(245,166,35,0.12));
+        }
+
         .ft-legal { display: flex; gap: 16px; }
-        .ft-legal a {
+        .ft-legal a, .ft-legal-link {
           font-family: 'Barlow Condensed', sans-serif;
           font-size: 10px; font-weight: 600;
           letter-spacing: .15em; text-transform: uppercase;
           color: var(--ft-dim); text-decoration: none;
           transition: color .2s;
         }
-        .ft-legal a:hover { color: rgba(255,255,255,.5); }
+        .ft-legal a:hover, .ft-legal-link:hover { color: rgba(255,255,255,.5); }
       `}</style>
 
       <footer className="ft">
@@ -436,8 +477,8 @@ export default function Footer() {
                 <div className="ft-certs">
                   <span className="ft-cert">ISO 9001</span>
                   <span className="ft-cert">CE Marked</span>
-                  <span className="ft-cert">Make in India</span>
                 </div>
+
               </div>
 
               {/* Stats */}
@@ -526,11 +567,34 @@ export default function Footer() {
             <div className="ft-bottom">
               <span className="ft-copy">© {new Date().getFullYear()} SunTech Packaging Machines. All rights reserved.</span>
               <div className="ft-bottom-right">
-                <span className="ft-made">🇮🇳 Made in India</span>
+              <p
+  style={{
+    color: "rgba(255,255,255,0.35)",
+    fontSize: 11,
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+    margin: 0,
+  }}
+>
+  Designed by{" "}
+  <a
+    href="https://www.troviracompany.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="ft-trovira-badge"
+    style={{ display: "inline-flex", alignItems: "center", gap: 5, textDecoration: "none" }}
+  >
+    <span className="ft-trovira-dot" />
+
+    <span className="ft-trovira-text">
+  The Trovira Company
+</span>
+  </a>
+</p>
                 <div className="ft-legal">
-                  <a href="#">Privacy Policy</a>
-                  <a href="#">Terms of Use</a>
-                  <a href="#">Sitemap</a>
+                  <Link to="/privacy-policy" className="ft-legal-link" style={{ cursor: 'pointer' }}>Privacy Policy</Link>
+                 
                 </div>
               </div>
             </div>
